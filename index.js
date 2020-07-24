@@ -6,6 +6,6 @@ server.listen(PORT, () => {
   console.log(`\n=== Server listening on port ${PORT} ===\n`);
 });
 
-let random = uuidv4();
+let random = `acct${uuidv4().substring(0, 5)}`;
 
 console.log(random);
