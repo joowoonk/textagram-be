@@ -1,10 +1,9 @@
 // Update with your config settings.
-
-// require("dotenv").config();
+require("dotenv").config();
 
 module.exports = {
   development: {
-    client: "postgresql",
+    client: "pg",
     connection: {
       port: process.env.PG_PORT,
       host: process.env.PG_HOST,
@@ -12,20 +11,22 @@ module.exports = {
       user: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
     },
+
     pool: {
-      min: process.env.DATABASE_POOL_MIN,
-      max: process.env.DATABASE_POOL_MAX,
+      min: 0,
+      max: 200,
     },
     migrations: {
-      directory: "./database/migrations",
+      // directory: "./database/migrations",
     },
     seeds: {
       directory: "./database/seeds",
     },
+    useNullAsDefault: true,
   },
 
   staging: {
-    client: "postgresql",
+    client: "pg",
     connection: {
       database: "my_db",
       user: "username",
