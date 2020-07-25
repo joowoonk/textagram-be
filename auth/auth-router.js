@@ -45,7 +45,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-// ---------------------- Generate Token ---------------------- //
+// This will create token.
 
 function generateToken(user) {
   const payload = {
@@ -57,17 +57,5 @@ function generateToken(user) {
   };
   return jwt.sign(payload, process.env.SECRET, options);
 }
-
-// ---------------------- Custom Middleware ---------------------- //
-
-// function validateUserContent(req, res, next) {
-//   if (!req.body.email || !req.body.password) {
-//     res
-//       .status(400)
-//       .json({ message: "Email & password fields are required." });
-//   } else {
-//     next();
-//   }
-// }
 
 module.exports = router;
