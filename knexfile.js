@@ -17,7 +17,7 @@ module.exports = {
       max: 200,
     },
     migrations: {
-      // directory: "./database/migrations",
+      directory: "./database/migrations",
     },
     seeds: {
       directory: "./database/seeds",
@@ -33,8 +33,8 @@ module.exports = {
       password: "password",
     },
     pool: {
-      min: 2,
-      max: 10,
+      min: 0,
+      max: 200,
     },
     migrations: {
       tableName: "knex_migrations",
@@ -45,8 +45,8 @@ module.exports = {
     client: "pg",
     connection: process.env.DATABASE_URL,
     pool: {
-      min: 2,
-      max: 10,
+      min: 0,
+      max: 200,
     },
     migrations: {
       directory: "./database/migrations",
