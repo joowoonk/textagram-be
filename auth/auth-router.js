@@ -1,13 +1,16 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const { v4: uuidv4 } = require("uuid");
 const Users = require("../users/users-model.js");
 
 // ---------------------- /api/auth ---------------------- //
 
 router.post("/register", (req, res) => {
   let user = req.body;
+  user.fake_id = `acct${uuidv4().substring(0, 5)}`;
+  // let fakeId = req.body.fake_id;
+
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
 
@@ -23,9 +26,9 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  let { username, password } = req.body;
+  let { email, password } = req.body;
 
-  Users.findBy({ username })
+  Users.findBy({ email })
     .first()
     .then((user) => {
       if (user && bcrypt.compareSync(password, user.password)) {

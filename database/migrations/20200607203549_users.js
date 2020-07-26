@@ -1,5 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 
+let fakeId = `acct${uuidv4().substring(0, 5)}`;
+
 exports.up = function (knex) {
   return knex.schema.createTable("users", (users) => {
     users.increments();
@@ -8,7 +10,7 @@ exports.up = function (knex) {
     users.string("password", 128).notNullable();
     users.string("email", 128).notNullable().unique();
     users.timestamp("created_at").defaultTo(knex.fn.now());
-    users.string("fake_id", 128).defaultTo(`acct${uuidv4().substring(0, 5)}`);
+    users.string("fake_id", 128);
     users.string("location", 150);
     users
       .string("profile_picture", 3000)
