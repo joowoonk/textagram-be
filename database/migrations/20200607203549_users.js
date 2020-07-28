@@ -1,7 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
 
-let fakeId = `acct${uuidv4().substring(0, 5)}`;
-
 exports.up = function (knex) {
   return knex.schema.createTable("users", (users) => {
     users.increments();
@@ -18,7 +16,7 @@ exports.up = function (knex) {
         "https://static.wixstatic.com/media/4151a5_7706b6198d164a3e947f4548166228ad~mv2.png"
       );
     users.string("about", 200).defaultTo("About yourself");
-    users.boolean("is_admin").defaultTo(0);
+    users.string("is_admin", 500);
   });
 };
 
