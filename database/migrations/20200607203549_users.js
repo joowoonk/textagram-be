@@ -16,7 +16,7 @@ exports.up = function (knex) {
         "https://static.wixstatic.com/media/4151a5_7706b6198d164a3e947f4548166228ad~mv2.png"
       );
     users.string("about", 200).defaultTo("About yourself");
-    users.string("is_admin", 500);
+    users.boolean("is_admin").defaultTo(0);
   });
 };
 

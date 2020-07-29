@@ -9,10 +9,10 @@ require("dotenv").config();
 router.post("/register", (req, res) => {
   let user = req.body;
   user.fake_id = `acct${uuidv4().substring(0, 5)}`;
-  if (req.headers.authorization === process.env.SECRET_CODE) {
-    user.is_admin = process.env.ADMIN_SECRET;
-    const hashAdminCode = bcrypt.hashSync(user.is_admin, 10); // 2
-    user.is_admin = hashAdminCode;
+  if (req.headers.admin === process.env.SECRET_CODE) {
+    user.is_admin = true;
+  } else {
+    user.is_admin = false;
   }
   // let fakeId = req.body.fake_id;
 

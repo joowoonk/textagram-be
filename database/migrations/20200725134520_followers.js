@@ -3,7 +3,7 @@ exports.up = function (knex) {
     followers.timestamp("created_at").defaultTo(knex.fn.now());
 
     followers
-      .integer("encourager_id")
+      .integer("following_id")
       .notNullable()
       .unsigned()
       .references("id")
@@ -12,7 +12,7 @@ exports.up = function (knex) {
       .onUpdate("CASCADE");
 
     followers
-      .integer("encouraged_id")
+      .integer("followered_id")
       .notNullable()
       .unsigned()
       .references("id")
@@ -21,7 +21,7 @@ exports.up = function (knex) {
       .onUpdate("CASCADE");
 
     // Composite primary key; this combines ids from each table to create a unique id
-    followers.primary(["encourager_id", "encouraged_id"]);
+    followers.primary(["following_id", "followered_id"]);
   });
 };
 

@@ -6,6 +6,7 @@ module.exports = {
   getAllUsers,
   findBy,
   getUserById,
+  getPostsByUserId,
 
   updateUser,
   deleteUser,
@@ -21,6 +22,10 @@ function getUserById(id) {
 
 function findBy(filter) {
   return db("users").where(filter);
+}
+
+function getPostsByUserId(id) {
+  return db("posts").where({ user_id: id });
 }
 
 async function addNewUser(user) {
