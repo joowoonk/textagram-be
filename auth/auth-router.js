@@ -10,21 +10,23 @@ require("dotenv").config();
 //POST making an account
 router.post("/register", (req, res) => {
   let user = req.body;
-  user.fake_id = `acct${uuidv4().substring(0, 5)}`;
+
   if (req.headers.admin === process.env.SECRET_CODE) {
     user.is_admin = true;
   } else {
     user.is_admin = false;
   }
-
+  if (!user.fake_id) {
+    user.fake_id = `acct${uuidv4().substring(0, 5)}`;
+  }
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
 
   Users.addNewUser(user)
-    .then((newUser) => {
-      const token = generateToken(newUser);
-      delete newUser.password;
-      res.status(201).json({ newUser, token });
+    .then((User) => {
+      const token = generateToken(User);
+      delete User.password;
+      res.status(201).json({ User, token });
     })
     .catch((error) => {
       res.status(500).json(error);

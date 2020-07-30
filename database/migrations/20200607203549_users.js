@@ -8,7 +8,7 @@ exports.up = function (knex) {
     users.string("password", 128).notNullable();
     users.string("email", 128).notNullable().unique();
     users.timestamp("created_at").defaultTo(knex.fn.now());
-    users.string("fake_id", 128);
+    users.string("fake_id", 20);
     users.string("location", 150);
     users
       .string("profile_picture", 3000)
