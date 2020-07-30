@@ -4,8 +4,10 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const Users = require("../users/users-model.js");
 require("dotenv").config();
-// ---------------------- /api/auth ---------------------- //
 
+//ENDPOINTS FOR AUTH
+
+//POST making an account
 router.post("/register", (req, res) => {
   let user = req.body;
   user.fake_id = `acct${uuidv4().substring(0, 5)}`;
@@ -14,7 +16,6 @@ router.post("/register", (req, res) => {
   } else {
     user.is_admin = false;
   }
-  // let fakeId = req.body.fake_id;
 
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
