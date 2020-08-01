@@ -23,10 +23,10 @@ router.post("/register", (req, res) => {
   user.password = hash;
 
   Users.addNewUser(user)
-    .then((User) => {
-      const token = generateToken(User);
-      delete User.password;
-      res.status(201).json({ User, token });
+    .then((newUser) => {
+      const token = generateToken(newUser);
+      delete newUser.password;
+      res.status(201).json({ newUser, token });
     })
     .catch((error) => {
       res.status(500).json(error);
