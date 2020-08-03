@@ -22,9 +22,10 @@ router.get("/:id", verifyUser, async (req, res) => {
   try {
     const id = req.params.id;
     const user = await Users.getUserById(id);
-    user.posts = await Users.getPostsById(id);
-    // user.voted_posts =  await
+    user.posts = await Posts.getPostsByUserId(id);
+    user.voting_counts = await Posts.getVotingCountsByPostId(id);
     //user.followers =
+    // user.followering
   } catch (error) {
     const response = res.status(500).json({ error });
     console.log(response);
