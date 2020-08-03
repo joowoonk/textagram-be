@@ -33,3 +33,11 @@ INSERT INTO posts (
 VALUES ('One of best quote from Rush', '“A wise man can learn more from his enemies than a fool from his friends." –Niki Lauda', 0, 'movie Rush inspirational', 2);
 
 
+
+
+INSERT INTO followers (
+following_id,
+	follwered_id
+)
+
+VALUES (1, 2);

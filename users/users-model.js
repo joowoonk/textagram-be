@@ -48,7 +48,7 @@ function deleteUser(id) {
 function getFollowedUsersByUserId(id) {
   return db("followers")
     .join("users", "followers.following_id", "users.id")
-    .where("followers.followered_id", "=", id)
+    .where("followers.follower_id", "=", id)
     .select(
       "followers.created_at",
       "users.id",
@@ -61,7 +61,7 @@ function getFollowedUsersByUserId(id) {
 
 function getFollowersByUserId(id) {
   return db("followers")
-    .join("users", "followers.followered_id", "users.id")
+    .join("users", "followers.follower_id", "users.id")
     .where("followers.following_id", "=", id)
     .select(
       "followers.created_at",

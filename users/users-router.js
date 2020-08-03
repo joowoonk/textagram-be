@@ -31,9 +31,9 @@ router.get("/:id", verifyUser, async (req, res) => {
     Promise.all(
       user.posts.map(async (post) => {
         const liked = await Posts.getVoteCounts(post.id);
-        // const list = await Photos.getLikesByPhotoId(photo.id);
+
         post.voting_counts = liked.count;
-        // photo.likes = list;
+
         return post;
       })
     ).then((post) => {
