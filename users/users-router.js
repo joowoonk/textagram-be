@@ -2,6 +2,7 @@ const router = require("express").Router();
 const jwt_decode = require("jwt-decode");
 
 const Users = require("./users-model.js");
+const Posts = require("../posts/posts-model");
 const restricted = require("../auth/restricted-middleware");
 
 //$2a$10$jWsh5BI9H8SQog/HERgkueoBuS2joRg5WYh8duCV86nwFuun7Awyy
@@ -24,11 +25,24 @@ router.get("/:id", verifyUser, async (req, res) => {
     const user = await Users.getUserById(id);
     user.posts = await Posts.getPostsByUserId(id);
     user.voting_counts = await Posts.getVotingCountsByPostId(id);
-    //user.followers =
-    // user.followering
-  } catch (error) {
-    const response = res.status(500).json({ error });
-    console.log(response);
+    user.followers = await Users.getFollowersByUserId(id);
+    user.following = await Users.getFollowedUsersByUserId(id);
+    delete user.password;
+    Promise.all(
+      user.posts.map(async (post) => {
+        const liked = await Posts.getVoteCounts(post.id);
+        // const list = await Photos.getLikesByPhotoId(photo.id);
+        post.voting_counts = liked.count;
+        // photo.likes = list;
+        return post;
+      })
+    ).then((post) => {
+      res.status(200).json({ user });
+    });
+  } catch (err) {
+    console.log(err);
+    const response = res.status(500).json({ err });
+    // console.log(response);
   }
 });
 

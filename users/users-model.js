@@ -7,9 +7,10 @@ module.exports = {
   findBy,
   getUserById,
   getPostsByUserId,
-
   updateUser,
   deleteUser,
+  getFollowedUsersByUserId,
+  getFollowersByUserId,
 };
 
 function getAllUsers() {
@@ -42,4 +43,32 @@ async function updateUser(id, changes) {
 
 function deleteUser(id) {
   return db("users").where({ id }).del();
+}
+
+function getFollowedUsersByUserId(id) {
+  return db("followers")
+    .join("users", "followers.following_id", "users.id")
+    .where("followers.followered_id", "=", id)
+    .select(
+      "followers.created_at",
+      "users.id",
+      "users.username",
+      "users.email",
+      "users.profile_picture",
+      "users.location"
+    );
+}
+
+function getFollowersByUserId(id) {
+  return db("followers")
+    .join("users", "followers.followered_id", "users.id")
+    .where("followers.following_id", "=", id)
+    .select(
+      "followers.created_at",
+      "users.id",
+      "users.username",
+      "users.email",
+      "users.profile_picture",
+      "users.location"
+    );
 }
