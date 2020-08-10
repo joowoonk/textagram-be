@@ -5,7 +5,8 @@ const Users = require("./users-model.js");
 const Posts = require("../posts/posts-model");
 const restricted = require("../auth/restricted-middleware");
 
-//$2a$10$jWsh5BI9H8SQog/HERgkueoBuS2joRg5WYh8duCV86nwFuun7Awyy
+//--/api/users
+
 //GET all the users info
 
 router.get("/", (req, res) => {

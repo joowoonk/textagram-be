@@ -41,3 +41,13 @@ following_id,
 )
 
 VALUES (1, 2);
+
+
+
+INSERT INTO comments (
+ 	text,
+	post_id,
+	user_id
+)
+
+VALUES ('First post!! This is great!',1, 2);

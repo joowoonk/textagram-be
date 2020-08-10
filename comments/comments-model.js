@@ -2,7 +2,7 @@ const db = require("../database/db");
 
 module.exports = {
   getCommentsByUserId,
-  getCommentsByPostsId,
+  getCommentsByPostId,
   getCommentById,
   addComment,
   updateCommentById,
@@ -13,7 +13,8 @@ function getCommentsByUserId(id) {
   return db("comments").where({ user_id: id });
 }
 
-function getCommentsByPostsId(id) {
+function getCommentsByPostId(id) {
+  //   console.log("yes");
   return db("comments")
     .where({ post_id: id })
     .join("users", "comments.user_id", "users.id")

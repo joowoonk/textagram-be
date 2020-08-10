@@ -14,7 +14,19 @@ module.exports = {
 };
 
 function getAllPosts() {
-  return db("posts");
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.created_at",
+      "posts.user_id",
+      "posts.votes",
+      "posts.hashtags",
+      "users.username",
+      "users.profile_picture"
+    );
 }
 
 function getPostsById(id) {
