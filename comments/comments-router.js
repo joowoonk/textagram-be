@@ -1,44 +1,46 @@
-const db = require("../database/db");
+const router = require("express").Router();
+const jwt_decode = require("jwt-decode");
 
-module.exports = {
-  getCommentsByUserId,
-  getCommentsByPostsId,
-  getCommentById,
-  addComment,
-  updateCommentById,
-  deleteCommentById,
-};
+const Comments = require("./comments-router");
 
-function getCommentsByUserId(id) {
-  return db("comments").where({ user_id: id });
-}
+// GET comment by ID //
 
-function getCommentsByPostsId(id) {
-  return db("comments")
-    .where({ post_id: id })
-    .join("users", "comments.user_id", "users.id")
-    .select(
-      "comments.id",
-      "comments.text",
-      "comments.created_at",
-      "users.id as user_id",
-      "users.username",
-      "users.profile_picture"
-    );
-}
-function getCommentById(id) {
-  return db("comments").where({ id }).first();
-}
-async function addComment(comment) {
-  const [id] = await db("comments").insert(comment, "id");
+router.get("/id", (req, res) => {
+  const id = req.params.id;
 
-  return getCommentById(id);
-}
+  Comments.getCommentById(id)
+    .then((comment) => {
+      res.status(200).json({ comment });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
-function updateCommentById(id, changes) {
-  return db("comments").where({ id }).update(changes);
-}
+// GET comment by Post_id //
 
-function deleteCommentById(id) {
-  return db("comments").where({ id }).del();
-}
+router.get("/id", (req, res) => {
+  const id = req.params.id;
+
+  Comments.getCommentsByPostId(id)
+    .then((comments) => {
+      res.status(200).json({ comments });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+// GET comment by User_id //
+
+router.get("/id", (req, res) => {
+  const id = req.params.id;
+
+  Comments.getCommentsByUserId(id)
+    .then((comments) => {
+      res.status(200).json({ comments });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
