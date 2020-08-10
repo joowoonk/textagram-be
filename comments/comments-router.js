@@ -44,3 +44,36 @@ router.get("/id", (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// PUT (UDATE) comment by id //
+
+router.put("/:id", (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+
+  Comments.updateCommentById(id, changes)
+    .then((updatedComment) => {
+      res.status(201).json({ updatedComment });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+// DELETE comment by id //
+
+router.delete("/:id", (req, res) => {
+  const id = req.params.id;
+
+  Comments.remove(id)
+    .then((deleted) => {
+      res
+        .status(200)
+        .json({ message: "Your comment's successfully deleted.", deleted });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+module.exports = router;
