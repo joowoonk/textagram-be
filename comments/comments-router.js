@@ -1,11 +1,14 @@
 const router = require("express").Router();
 const jwt_decode = require("jwt-decode");
 
-const Comments = require("./comments-router");
+const Comments = require("./comments-model");
+
+// --- api/comments
 
 // GET comment by ID //
 
-router.get("/id", (req, res) => {
+router.get("/:id", (req, res) => {
+  console.log("yes");
   const id = req.params.id;
 
   Comments.getCommentById(id)
@@ -19,7 +22,8 @@ router.get("/id", (req, res) => {
 
 // GET comment by Post_id //
 
-router.get("/id", (req, res) => {
+router.get("/post/:id", (req, res) => {
+  console.log("yes?");
   const id = req.params.id;
 
   Comments.getCommentsByPostId(id)
@@ -33,7 +37,7 @@ router.get("/id", (req, res) => {
 
 // GET comment by User_id //
 
-router.get("/id", (req, res) => {
+router.get("/user/:id", (req, res) => {
   const id = req.params.id;
 
   Comments.getCommentsByUserId(id)
