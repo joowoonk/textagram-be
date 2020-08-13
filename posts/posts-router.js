@@ -37,17 +37,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
 
-  console.log({ id });
-  Posts.getPostById(id)
-    .then((post) => {
-      res.status(200).json({ post });
-    })
-    .catch((error) => {
-      res.status(500).json(error);
-    });
+    const post = await Posts.getPostById(id);
+    post.comments = await Comments.getCommentsByPostId(id);
+    res.status(200).json({ post });
+  } catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 module.exports = router;
