@@ -52,7 +52,7 @@ function getFollowedUsersByUserId(id) {
     .select(
       "followers.created_at",
       "users.id",
-      "users.username",
+      "users.fake_id",
       "users.email",
       "users.profile_picture",
       "users.location"
@@ -66,7 +66,7 @@ function getFollowersByUserId(id) {
     .select(
       "followers.created_at",
       "users.id",
-      "users.username",
+      "users.fake_id",
       "users.email",
       "users.profile_picture",
       "users.location"

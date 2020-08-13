@@ -22,7 +22,7 @@ function getAllPosts() {
     "posts.user_id",
 
     "posts.hashtags",
-    "users.username",
+    "users.fake_id",
     "users.profile_picture"
   );
 }
@@ -37,7 +37,7 @@ async function getPostById(id) {
       "posts.title",
       "posts.context",
       "posts.hashtags",
-      "users.username",
+      "users.fake_id",
       "users.profile_picture"
     );
   post.likes = await getVotingCountsByPostId(post.id);
@@ -73,6 +73,21 @@ async function updatePost(id, changes) {
 function deletePost(id) {
   return db("posts").where({ id }).del();
 }
+
+function search(filter) {
+  return db("posts")
+    .where(db.raw(`LOWER("title")`, "like", `${filter.toLowerCase()}%`))
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.description",
+      "posts.hashtags",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
 async function getVotingCountsByPostId(post_id) {
   const list = await db("up_voted_post")
     .where({ post_id })
@@ -80,7 +95,7 @@ async function getVotingCountsByPostId(post_id) {
     .select(
       "up_voted_post.user_id",
       "up_voted_post.post_id",
-      "users.username",
+      "users.fake_id",
       "users.profile_picture"
     );
 
