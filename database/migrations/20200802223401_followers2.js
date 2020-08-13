@@ -5,7 +5,7 @@ exports.up = async function (knex) {
 };
 exports.down = async function (knex) {
   await knex.schema.alterTable("followers", (table) => {
-    table.dropColumnIfExists("follower_id");
+    // table.dropColumnIfExists("follower_id");
   });
 };
 

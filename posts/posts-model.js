@@ -2,7 +2,7 @@ const db = require("../database/db");
 
 module.exports = {
   getAllPosts,
-  getPostsById,
+  getPostById,
   findBy,
   getPostsByUserId,
   getVotingCountsByPostId,
@@ -14,23 +14,34 @@ module.exports = {
 };
 
 function getAllPosts() {
-  return db("posts")
+  return db("posts").join("users", "posts.user_id", "users.id").select(
+    "posts.id",
+    "posts.title",
+    "posts.context",
+    "posts.created_at",
+    "posts.user_id",
+
+    "posts.hashtags",
+    "users.username",
+    "users.profile_picture"
+  );
+}
+
+async function getPostById(id) {
+  const post = await db("posts")
+    .where("posts.id", id)
+    .first()
     .join("users", "posts.user_id", "users.id")
     .select(
       "posts.id",
       "posts.title",
       "posts.context",
-      "posts.created_at",
-      "posts.user_id",
-      "posts.votes",
       "posts.hashtags",
       "users.username",
       "users.profile_picture"
     );
-}
-
-function getPostsById(id) {
-  return db("posts").where({ id }).first();
+  post.likes = await getVotingCountsByPostId(post.id);
+  return post;
 }
 
 async function getPostsByUserId(id) {
@@ -50,13 +61,13 @@ function getPostsByUserId(id) {
 async function addNewPost(post) {
   const [id] = await db("posts").insert(post, "id");
 
-  return getPostsById(id);
+  return getPostById(id);
 }
 
 async function updatePost(id, changes) {
   await db("posts").where({ id }).update(changes);
 
-  return getPostsById(id);
+  return getPostById(id);
 }
 
 function deletePost(id) {

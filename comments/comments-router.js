@@ -8,7 +8,6 @@ const Comments = require("./comments-model");
 // GET comment by ID //
 
 router.get("/:id", (req, res) => {
-  console.log("yes");
   const id = req.params.id;
 
   Comments.getCommentById(id)
@@ -20,10 +19,30 @@ router.get("/:id", (req, res) => {
     });
 });
 
+// POST comment by post ID //
+
+router.post("/:id", (req, res) => {
+  let id = req.params.id;
+  let comment = req.body;
+  const token = req.headers.authorization;
+  const decode = jwt_decode(token);
+  comment.post_id = id;
+  comment.user_id = decode.subject;
+
+  Comments.addComment(comment)
+    .then((newComment) => {
+      const response = res.status(201).json({ newComment });
+      // console.log({ response });
+    })
+    .catch((err) => {
+      const error = res.status(500).json({ err });
+      // console.log({ error });
+    });
+});
+
 // GET comment by Post_id //
 
 router.get("/post/:id", (req, res) => {
-  console.log("yes?");
   const id = req.params.id;
 
   Comments.getCommentsByPostId(id)
@@ -69,7 +88,7 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
 
-  Comments.remove(id)
+  Comments.deleteCommentById(id)
     .then((deleted) => {
       res
         .status(200)

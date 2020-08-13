@@ -5,7 +5,7 @@ exports.up = async function (knex) {
 };
 exports.down = async function (knex) {
   await knex.schema.alterTable("posts", (table) => {
-    table.dropColumnIfExists("created_at");
+    table.dropColumn("votes");
   });
 };
 
