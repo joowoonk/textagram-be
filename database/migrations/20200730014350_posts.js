@@ -3,7 +3,7 @@ exports.up = async function (knex) {
     post.increments();
     post.string("title", 300).notNullable();
     post.string("context", 3000).notNullable();
-    post.integer("votes").defaultTo(0);
+    post.timestamp("created_at").defaultTo(knex.fn.now());
     post.string("hashtags", 500);
     post
       .integer("user_id")
