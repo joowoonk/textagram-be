@@ -4,7 +4,7 @@ exports.up = async function (knex) {
     post.string("title", 300).notNullable();
     post.string("context", 3000).notNullable();
     post.timestamp("created_at").defaultTo(knex.fn.now());
-    post.string("hashtags", 500);
+    post.specificType("hashtags", "text ARRAY");
     post
       .integer("user_id")
       .notNullable()
