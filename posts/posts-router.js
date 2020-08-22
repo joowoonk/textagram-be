@@ -60,4 +60,34 @@ router.get("/search/:title", (req, res) => {
     });
 });
 
+router.post("/", restricted, (req, res) => {
+  let post = req.body;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  post.user_id = decoded.subject;
+
+  post.hashtags = post.hashtags.replace(",", "");
+  post.hashtags = post.hashtags.replace("#", "");
+  post.hashtags = post.hashtags.replace(
+    /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.#@£\/]/g,
+    ""
+  );
+  post.hashtags = post.hashtags
+    .replace(/#/g, "")
+    .replace(/([^" "]+)/g, "#" + "$1");
+  post.hashtags = post.hashtags.split(" ");
+  post.hashtags = post.hashtags.filter((hash) => {
+    return hash != "";
+  });
+  console.log(post.hashtags);
+
+  Posts.addNewPost(post)
+    .then((newPost) => {
+      res.status(201).json({ newPost });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 module.exports = router;
