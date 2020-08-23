@@ -14,17 +14,20 @@ module.exports = {
 };
 
 function getAllPosts() {
-  return db("posts").join("users", "posts.user_id", "users.id").select(
-    "posts.id",
-    "posts.title",
-    "posts.context",
-    "posts.created_at",
-    "posts.user_id",
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.created_at",
+      "posts.user_id",
 
-    "posts.hashtags",
-    "users.fake_id",
-    "users.profile_picture"
-  );
+      "posts.hashtags",
+      "users.fake_id",
+      "users.profile_picture"
+    )
+    .orderBy("posts.id", "DESC");
 }
 
 async function getPostById(id) {

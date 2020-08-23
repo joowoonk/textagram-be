@@ -64,8 +64,8 @@ router.post("/", restricted, (req, res) => {
   let post = req.body;
   const token = req.headers.authorization;
   const decoded = jwt_decode(token);
-  post.user_id = decoded.subject;
 
+  post.user_id = decoded.subject;
   post.hashtags = post.hashtags.replace(",", "");
   post.hashtags = post.hashtags.replace("#", "");
   post.hashtags = post.hashtags.replace(
@@ -79,7 +79,6 @@ router.post("/", restricted, (req, res) => {
   post.hashtags = post.hashtags.filter((hash) => {
     return hash != "";
   });
-  console.log(post.hashtags);
 
   Posts.addNewPost(post)
     .then((newPost) => {
