@@ -41,7 +41,7 @@ router.get("/:id", verifyUser, async (req, res) => {
       res.status(200).json({ user });
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     const response = res.status(500).json({ err });
     // console.log(response);
   }

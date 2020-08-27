@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
       posts.map(async (post) => {
         const likes = await Posts.getVotingCountsByPostId(post.id);
         const comments = await Comments.getCommentsByPostId(post.id);
-        console.log({ comments });
+        // console.log({ comments });
         post.likes = likes.count;
         post.comments = comments.length;
         // console.log({ post });
@@ -58,6 +58,40 @@ router.get("/search/:title", (req, res) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
+});
+
+router.post("/", restricted, (req, res) => {
+  let post = req.body;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+
+  post.user_id = decoded.subject;
+  post.hashtags = post.hashtags.replace(",", "");
+  post.hashtags = post.hashtags.replace("#", "");
+  post.hashtags = post.hashtags.replace(
+    /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.#@£\/]/g,
+    ""
+  );
+  post.hashtags = post.hashtags
+    .replace(/#/g, "")
+    .replace(/([^" "]+)/g, "#" + "$1");
+  post.hashtags = post.hashtags.split(" ");
+  post.hashtags = post.hashtags.filter((hash) => {
+    return hash != "";
+  });
+
+  if (post.hashtags.length <= 5) {
+    Posts.addNewPost(post)
+      .then((newPost) => {
+        res.status(201).json({ newPost });
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  } else {
+    // alert("your hashtags are too many!");
+    res.status(402).json({ message: "your hashtags are too many!" });
+  }
 });
 
 module.exports = router;

@@ -30,6 +30,7 @@ function getCommentsByPostId(id) {
 function getCommentById(id) {
   return db("comments").where({ id }).first();
 }
+
 async function addComment(comment) {
   const [id] = await db("comments").insert(comment, "id");
 

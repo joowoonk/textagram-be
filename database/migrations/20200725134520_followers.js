@@ -3,7 +3,7 @@ exports.up = function (knex) {
     followers.timestamp("created_at").defaultTo(knex.fn.now());
 
     followers
-      .integer("following_id")
+      .integer("following_id") //change the name to texter_id when you can
       .notNullable()
       .unsigned()
       .references("id")
