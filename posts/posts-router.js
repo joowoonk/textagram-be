@@ -80,13 +80,18 @@ router.post("/", restricted, (req, res) => {
     return hash != "";
   });
 
-  Posts.addNewPost(post)
-    .then((newPost) => {
-      res.status(201).json({ newPost });
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+  if (post.hashtags.length <= 5) {
+    Posts.addNewPost(post)
+      .then((newPost) => {
+        res.status(201).json({ newPost });
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  } else {
+    // alert("your hashtags are too many!");
+    res.status(402).json({ message: "your hashtags are too many!" });
+  }
 });
 
 module.exports = router;

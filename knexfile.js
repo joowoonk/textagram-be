@@ -16,6 +16,7 @@ module.exports = {
       min: 0,
       max: 200,
     },
+
     migrations: {
       directory: "./database/migrations",
     },
