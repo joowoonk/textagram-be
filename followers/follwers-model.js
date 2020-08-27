@@ -10,11 +10,17 @@ function getAllFollowers() {
 }
 
 async function followUser(following_id, follower_id) {
-  console.log({ following_id }, { follower_id });
   await db("followers").insert({ following_id, follower_id });
 
   return db("followers")
     .join("users", "followers.following_id", "users.id")
     .where("followers.follower_id", "=", follower_id)
-    .select("*");
+    .select(
+      "followers.created_at",
+      "users.id",
+      "users.fake_id",
+      "users.email",
+      "users.profile_picture",
+      "users.location"
+    );
 }
