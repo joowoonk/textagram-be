@@ -24,5 +24,5 @@ exports.up = async function (knex) {
 };
 
 exports.down = async function (knex) {
-  await knex.schema.dropTableIfExists("up_voted_post");
+  await knex.schema.dropTableIfExists("down_voted_post");
 };

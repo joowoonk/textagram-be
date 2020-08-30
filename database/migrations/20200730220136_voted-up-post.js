@@ -23,6 +23,6 @@ exports.up = function (knex) {
   });
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function (knex) {
   return knex.schema.dropTableIfExists("up_voted_post");
 };

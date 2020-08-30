@@ -42,6 +42,9 @@ router.get("/:id", async (req, res) => {
     const id = req.params.id;
 
     const post = await Posts.getPostById(id);
+    const likes = await Posts.getVotingCountsByPostId(id);
+
+    post.likes = likes.count;
     post.comments = await Comments.getCommentsByPostId(id);
     res.status(200).json({ post });
   } catch (error) {

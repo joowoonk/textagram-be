@@ -1,0 +1,4 @@
+Now work on POST endpoint to post each post, making sure hashtag should be in an array platform.
+
+
+https://stackoverflow.com/questions/32209622/add-hashtag-before-each-keyword
