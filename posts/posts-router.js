@@ -16,10 +16,10 @@ router.get("/", async (req, res) => {
 
     Promise.all(
       posts.map(async (post) => {
-        const likes = await Posts.getVotingCountsByPostId(post.id);
+        const votes = await Posts.getVotingCountsByPostId(post.id);
         const comments = await Comments.getCommentsByPostId(post.id);
         // console.log({ comments });
-        post.likes = likes.count;
+        post.votes = votes.count;
         post.comments = comments.length;
         // console.log({ post });
         return post;
@@ -41,13 +41,16 @@ router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
-    const post = await Posts.getPostById(id);
-    const likes = await Posts.getVotingCountsByPostId(id);
+    const post = await Posts.getPostsById(id);
 
-    post.likes = likes.count;
+    // const votes = await Posts.getVotingCountsByPostId(id);
+
+    // post.votes = votes.count;
     post.comments = await Comments.getCommentsByPostId(id);
+
     res.status(200).json({ post });
   } catch (error) {
+    console.log("noooo");
     res.status(500).json(error);
   }
 });
@@ -95,6 +98,35 @@ router.post("/", restricted, (req, res) => {
     // alert("your hashtags are too many!");
     res.status(402).json({ message: "your hashtags are too many!" });
   }
+});
+
+//adding new bookmark to a post
+router.post("/:id/bookmark", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+  console.log({ post_id }, { user_id });
+  Posts.bookmarkingPost(user_id, post_id)
+    .then((results) => {
+      console.log({ results });
+      Promise.all(
+        results.map(async (post) => {
+          const bookmarks = await Posts.getBookmarksCounts(post.id);
+          const comments = await Comments.getCommentsByPostId(post.id);
+          post.bookmarks = bookmarks.count;
+          post.comments = comments.length;
+          return post;
+        })
+      ).then((post) => {
+        console.log("yes");
+        res.status(200).json({ post });
+      });
+    })
+    .catch((err) => {
+      console.log("no");
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;

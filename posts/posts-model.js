@@ -11,6 +11,7 @@ module.exports = {
   updatePost,
   deletePost,
   getBookmarksCounts,
+  bookmarkingPost,
 };
 
 function getAllPosts() {
@@ -43,7 +44,7 @@ async function getPostsById(id) {
       "users.fake_id",
       "users.profile_picture"
     );
-  post.likes = await getVotingCountsByPostId(post.id);
+  post.votes = await getVotingCountsByPostId(post.id);
   return post;
 }
 
@@ -92,7 +93,7 @@ async function getBookmarkedPostsByUserId(user_id) {
 
   return Promise.all(
     bookmarked.map(async (bookmarked) => {
-      return await getPostByIdSimple(bookmarked.post_id);
+      return await getPostsById(bookmarked.post_id);
     })
   )
     .then((bookmarkedPosts) => {
@@ -118,12 +119,12 @@ async function getPostByIdSimple(id) {
     );
 
   const list = await getBookmarksCounts(post.id);
-  post.likes = list.count;
+  post.votes = list.count;
   return post;
 }
 
 async function getVotingCountsByPostId(post_id) {
-  const list = await db("up_voted_post")
+  const upVoted = await db("up_voted_post")
     .where({ post_id })
     .join("users", "up_voted_post.user_id", "users.id")
     .select(
@@ -132,9 +133,18 @@ async function getVotingCountsByPostId(post_id) {
       "users.fake_id",
       "users.profile_picture"
     );
+  const downVoted = await db("down_voted_post")
+    .where({ post_id })
+    .join("users", "down_voted_post.user_id", "users.id")
+    .select(
+      "down_voted_post.user_id",
+      "down_voted_post.post_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
 
-  let count = list.length;
-  return { count, list };
+  let votes = upVoted.length - downVoted.length;
+  return { votes, upVoted, downVoted };
 }
 
 async function getBookmarksCounts(post_id) {
@@ -142,4 +152,19 @@ async function getBookmarksCounts(post_id) {
     .where("post_id", "=", post_id)
     .count("post_id as count")
     .first();
+}
+
+async function bookmarkingPost(user_id, post_id) {
+  await db("bookmarks").insert({ user_id, post_id });
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
 }

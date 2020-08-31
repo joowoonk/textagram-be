@@ -2,3 +2,5 @@ Now work on POST endpoint to post each post, making sure hashtag should be in an
 
 
 https://stackoverflow.com/questions/32209622/add-hashtag-before-each-keyword
+
+NOW let's work on allowing an user to bookmark a post 

@@ -15,8 +15,9 @@ router.get("/:id", async (req, res) => {
 
     Promise.all(
       user.posts.map(async (post) => {
-        const liked = await Posts.getVotingCountsByPostId(post.id);
-        post.likes = liked.count;
+        const totalVotes = await Posts.getVotingCountsByPostId(post.id);
+        console.log(totalVotes);
+        post.votes = totalVotes.count;
 
         return post;
       })
