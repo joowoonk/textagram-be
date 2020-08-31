@@ -1,5 +1,6 @@
 exports.up = async function (knex) {
   await knex.schema.createTable("bookmarks", (bookmarks) => {
+    bookmarks.boolean("is_bookmarked").defaultTo(0);
     bookmarks
       .integer("user_id")
       .notNullable()

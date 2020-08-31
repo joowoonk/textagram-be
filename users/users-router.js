@@ -3,11 +3,29 @@ const Users = require("./users-model");
 const Posts = require("../posts/posts-model");
 
 router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  const user = await Users.getUserById(id);
+  try {
+    const id = req.params.id;
+    const user = await Users.getUserById(id);
+    console.log("yes");
+    user.posts = await Posts.getPostsByUserId(id);
+    user.bookmarks = await Posts.getBookmarkedPostsByUserId(id);
+    user.following = await Users.getFollowedUsersByUserId(id);
+    user.follwers = await Users.getFollowersByUserId(id);
+    delete user.password;
 
-  user.posts = await Users.getUserById(id);
-  user.bookmarks = await Posts.
+    Promise.all(
+      user.posts.map(async (post) => {
+        const liked = await Posts.getVotingCountsByPostId(post.id);
+        post.likes = liked.count;
+
+        return post;
+      })
+    ).then((post) => {
+      res.status(200).json({ user, post });
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 });
 
 module.exports = router;

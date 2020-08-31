@@ -2,15 +2,15 @@ const db = require("../database/db");
 
 module.exports = {
   getAllPosts,
-  getPostById,
+  getPostsById,
   findBy,
   getPostsByUserId,
   getVotingCountsByPostId,
-
+  getBookmarkedPostsByUserId,
   addNewPost,
   updatePost,
   deletePost,
-  getVoteCounts,
+  getBookmarksCounts,
 };
 
 function getAllPosts() {
@@ -30,7 +30,7 @@ function getAllPosts() {
     .orderBy("posts.id", "DESC");
 }
 
-async function getPostById(id) {
+async function getPostsById(id) {
   const post = await db("posts")
     .where("posts.id", id)
     .first()
@@ -57,20 +57,16 @@ function findBy(filter) {
   return db("posts").where(filter);
 }
 
-function getPostsByUserId(id) {
-  return db("posts").where({ user_id: id });
-}
-
 async function addNewPost(post) {
   const [id] = await db("posts").insert(post, "id");
 
-  return getPostById(id);
+  return getPostsById(id);
 }
 
 async function updatePost(id, changes) {
   await db("posts").where({ id }).update(changes);
 
-  return getPostById(id);
+  return getPostsById(id);
 }
 
 function deletePost(id) {
@@ -91,6 +87,41 @@ function search(filter) {
     );
 }
 
+async function getBookmarkedPostsByUserId(user_id) {
+  const bookmarked = await db("bookmarks").where({ user_id });
+
+  return Promise.all(
+    bookmarked.map(async (bookmarked) => {
+      return await getPostByIdSimple(bookmarked.post_id);
+    })
+  )
+    .then((bookmarkedPosts) => {
+      return bookmarkedPosts;
+    })
+    .catch((err) => {
+      console.error({ err });
+    });
+}
+
+async function getPostByIdSimple(id) {
+  const post = await db("posts")
+    .where("posts.id", id)
+    .first()
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+
+  const list = await getBookmarksCounts(post.id);
+  post.likes = list.count;
+  return post;
+}
+
 async function getVotingCountsByPostId(post_id) {
   const list = await db("up_voted_post")
     .where({ post_id })
@@ -106,8 +137,8 @@ async function getVotingCountsByPostId(post_id) {
   return { count, list };
 }
 
-function getVoteCounts(post_id) {
-  return db("up_voted_post")
+async function getBookmarksCounts(post_id) {
+  return db("bookmarks")
     .where("post_id", "=", post_id)
     .count("post_id as count")
     .first();
