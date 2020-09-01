@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
         const votes = await Posts.getVotingCountsByPostId(post.id);
         const comments = await Comments.getCommentsByPostId(post.id);
         // console.log({ comments });
-        post.votes = votes.count;
+        post.votes = votes.votes;
         post.comments = comments.length;
         // console.log({ post });
         return post;

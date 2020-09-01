@@ -15,32 +15,35 @@ exports.seed = function (knex) {
     },
     {
       title: "One of best quote from Forrest Gump",
-      context:
-        "My mama always said, ‘Life was like a box of chocolates. You never know what you’re gonna get.' -Forrest Gump",
+      context: `My mama always said, ‘Life was like a box of chocolates. You never know what you’re gonna get.'
+         -Forrest Gump`,
       user_id: 2,
       hashtags: ["#bestMovie", "#forrest", "#gump", "#life"],
     },
     {
       title: "One of best quote from Rush",
-      context:
-        "A wise man can learn more from his enemies than a fool from his friends. –Niki Lauda",
+      context: `A wise man can learn more from his enemies than a fool from his friends.
+      –Niki Lauda`,
       user_id: 2,
       hashtags: ["#movie", "#Rush", "#inspirational"],
     },
     {
       title: "One of best line I heard from Yoda!",
-      context: "Do, or do not. There is no 'try' - Yoda",
+      context: `Do, or do not. There is no 'try' 
+      - Yoda`,
       user_id: 3,
       hashtags: ["#StarWars", "#MayTheForceBeWithYou", "#Yoda"],
     },
     {
       title: "Life isn't easy",
-      context:
-        "Living a life isn't a easy process, but do we really get to live a life we want? We will really have to think about that. Is this life what you want? If you die tonight, would you say you lived a life that you wanted? What are the things you can fix today? or something you need to do. Long term problem isn't something you may not be able to escape but are you working on it at least little by little?, you will be able to fix them eventually. Start small. You will be able to overcome it in the end.",
+      context: `Living a life isn't a easy process, but do we really get to live a life we want? We will really have to think about that. Is this life what you want? If you die tonight, would you say you lived a life that you wanted? What are the things you can fix today? or something you need to do. Long term problem isn't something you may not be able to escape but are you working on it at least little by little?, you will be able to fix them eventually. Start small. You will be able to overcome it in the end.`,
       user_id: 3,
       hashtags: ["#encouraging", "#life"],
     },
   ];
+  for (let i = 0; i < posts.length; i++) {
+    posts[i].context = posts[i].context.split("\n");
+  }
 
   return knex("posts").insert(posts);
 };
