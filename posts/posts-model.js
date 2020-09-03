@@ -11,7 +11,10 @@ module.exports = {
   updatePost,
   deletePost,
   getBookmarksCounts,
+  upVotingPost,
+  removeUpVotingPost,
   bookmarkingPost,
+  removeBookmarkingPost,
 };
 
 function getAllPosts() {
@@ -154,6 +157,37 @@ async function getBookmarksCounts(post_id) {
     .first();
 }
 
+async function upVotingPost(user_id, post_id) {
+  await db("up_voted_post").insert({ user_id, post_id });
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
+async function removeUpVotingPost(user_id, post_id) {
+  await db("up_voted_post").where({ user_id, post_id }).del();
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.created_at",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
 async function bookmarkingPost(user_id, post_id) {
   await db("bookmarks").insert({ user_id, post_id });
 
@@ -163,6 +197,22 @@ async function bookmarkingPost(user_id, post_id) {
       "posts.id",
       "posts.title",
       "posts.context",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
+async function removeBookmarkingPost(user_id, post_id) {
+  await db("bookmarks").where({ user_id, post_id }).del();
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.created_at",
       "posts.user_id",
       "users.fake_id",
       "users.profile_picture"

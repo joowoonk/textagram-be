@@ -3,3 +3,10 @@ GET http://localhost:3300/api/posts/
 ###
 
 GET http://localhost:3300/api/comments/post/6
+
+
+###
+
+GET http://localhost:3300/api/users/1
+
+###

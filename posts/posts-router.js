@@ -66,7 +66,7 @@ router.get("/search/:title", (req, res) => {
     });
 });
 
-router.post("/", restricted, (req, res) => {
+router.post("/", (req, res) => {
   let post = req.body;
   const token = req.headers.authorization;
   const decoded = jwt_decode(token);
@@ -85,6 +85,8 @@ router.post("/", restricted, (req, res) => {
   post.hashtags = post.hashtags.filter((hash) => {
     return hash != "";
   });
+
+  post.context = post.context.split("\n");
 
   if (post.hashtags.length <= 5) {
     Posts.addNewPost(post)
@@ -106,10 +108,9 @@ router.post("/:id/bookmark", restricted, (req, res) => {
   const token = req.headers.authorization;
   const decoded = jwt_decode(token);
   const user_id = decoded.subject;
-  console.log({ post_id }, { user_id });
+
   Posts.bookmarkingPost(user_id, post_id)
     .then((results) => {
-      console.log({ results });
       Promise.all(
         results.map(async (post) => {
           const bookmarks = await Posts.getBookmarksCounts(post.id);
@@ -119,12 +120,81 @@ router.post("/:id/bookmark", restricted, (req, res) => {
           return post;
         })
       ).then((post) => {
-        console.log("yes");
         res.status(200).json({ post });
       });
     })
     .catch((err) => {
-      console.log("no");
+      res.status(500).json(err);
+    });
+});
+
+router.post("/:id/upvote", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.upVotingPost(user_id, post_id)
+    .then((results) => {
+      Promise.all(
+        results.map(async (post) => {
+          const votes = await Posts.getVotingCountsByPostId(post.id);
+          post.votes = votes.votes;
+          return post;
+        })
+      ).then((post) => {
+        res.status(200).json({ post });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.delete("/:id/removeupvote", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.removeUpVotingPost(user_id, post_id)
+    .then((results) => {
+      Promise.all(
+        results.map(async (post) => {
+          const votes = await Posts.getVotingCountsByPostId(post.id);
+          post.votes = votes.votes;
+          return post;
+        })
+      ).then((posts) => {
+        res.status(200).json({ posts });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.delete("/:id/unbookmark", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.removeBookmarkingPost(user_id, post_id)
+    .then((results) => {
+      Promise.all(
+        results.map(async (post) => {
+          const bookmarks = await Posts.getBookmarksCounts(post.id);
+          const comments = await Comments.getCommentsByPostId(post.id);
+          post.bookmarks = bookmarks.count;
+          post.comments = comments.length;
+          return post;
+        })
+      ).then((posts) => {
+        res.status(200).json({ posts });
+      });
+    })
+    .catch((err) => {
       res.status(500).json(err);
     });
 });
