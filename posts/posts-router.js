@@ -17,6 +17,7 @@ router.get("/", async (req, res) => {
     Promise.all(
       posts.map(async (post) => {
         const votes = await Posts.getVotingCountsByPostId(post.id);
+        // console.log("posts votes: ", votes);
         const comments = await Comments.getCommentsByPostId(post.id);
         // console.log({ comments });
         post.votes = votes.votes;
@@ -158,6 +159,52 @@ router.delete("/:id/removeupvote", restricted, (req, res) => {
   const user_id = decoded.subject;
 
   Posts.removeUpVotingPost(user_id, post_id)
+    .then((results) => {
+      Promise.all(
+        results.map(async (post) => {
+          const votes = await Posts.getVotingCountsByPostId(post.id);
+          post.votes = votes.votes;
+          return post;
+        })
+      ).then((posts) => {
+        res.status(200).json({ posts });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.post("/:id/downvote", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.downVotingPost(user_id, post_id)
+    .then((results) => {
+      Promise.all(
+        results.map(async (post) => {
+          const votes = await Posts.getVotingCountsByPostId(post.id);
+          post.votes = votes.votes;
+          return post;
+        })
+      ).then((post) => {
+        res.status(200).json({ post });
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
+router.delete("/:id/removedownvote", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.removeDownVotingPost(user_id, post_id)
     .then((results) => {
       Promise.all(
         results.map(async (post) => {

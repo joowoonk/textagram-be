@@ -13,8 +13,12 @@ module.exports = {
   getBookmarksCounts,
   upVotingPost,
   removeUpVotingPost,
+  downVotingPost,
+  removeDownVotingPost,
   bookmarkingPost,
   removeBookmarkingPost,
+  getUpVotedPostsByUserId,
+  getDownVotedPostsByUserId,
 };
 
 function getAllPosts() {
@@ -107,6 +111,38 @@ async function getBookmarkedPostsByUserId(user_id) {
     });
 }
 
+async function getUpVotedPostsByUserId(user_id) {
+  const upVoted = await db("up_voted_post").where({ user_id });
+
+  return Promise.all(
+    upVoted.map(async (upVoted) => {
+      return await getPostsById(upVoted.post_id);
+    })
+  )
+    .then((upVotedPosts) => {
+      return upVotedPosts;
+    })
+    .catch((err) => {
+      console.error({ err });
+    });
+}
+
+async function getDownVotedPostsByUserId(user_id) {
+  const downVoted = await db("down_voted_post").where({ user_id });
+
+  return Promise.all(
+    downVoted.map(async (downVoted) => {
+      return await getPostsById(downVoted.post_id);
+    })
+  )
+    .then((downVotedPosts) => {
+      return downVotedPosts;
+    })
+    .catch((err) => {
+      console.error({ err });
+    });
+}
+
 async function getPostByIdSimple(id) {
   const post = await db("posts")
     .where("posts.id", id)
@@ -174,6 +210,37 @@ async function upVotingPost(user_id, post_id) {
 
 async function removeUpVotingPost(user_id, post_id) {
   await db("up_voted_post").where({ user_id, post_id }).del();
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.created_at",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
+async function downVotingPost(user_id, post_id) {
+  await db("down_voted_post").insert({ user_id, post_id });
+
+  return db("posts")
+    .join("users", "posts.user_id", "users.id")
+    .select(
+      "posts.id",
+      "posts.title",
+      "posts.context",
+      "posts.user_id",
+      "users.fake_id",
+      "users.profile_picture"
+    );
+}
+
+async function removeDownVotingPost(user_id, post_id) {
+  await db("down_voted_post").where({ user_id, post_id }).del();
 
   return db("posts")
     .join("users", "posts.user_id", "users.id")

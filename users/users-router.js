@@ -9,6 +9,8 @@ router.get("/:id", async (req, res) => {
     console.log("yes");
     user.posts = await Posts.getPostsByUserId(id);
     user.bookmarks = await Posts.getBookmarkedPostsByUserId(id);
+    user.upVotes = await Posts.getUpVotedPostsByUserId(id);
+    user.downVotes = await Posts.getDownVotedPostsByUserId(id);
     user.following = await Users.getFollowedUsersByUserId(id);
     user.follwers = await Users.getFollowersByUserId(id);
     delete user.password;
@@ -16,7 +18,7 @@ router.get("/:id", async (req, res) => {
     Promise.all(
       user.posts.map(async (post) => {
         const totalVotes = await Posts.getVotingCountsByPostId(post.id);
-        console.log(totalVotes);
+        // console.log(totalVotes);
         post.votes = totalVotes.count;
 
         return post;
