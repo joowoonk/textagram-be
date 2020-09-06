@@ -33,7 +33,8 @@ function getAllPosts() {
 
       "posts.hashtags",
       "users.fake_id",
-      "users.profile_picture"
+      "users.profile_picture",
+      "users.is_admin"
     )
     .orderBy("posts.id", "DESC");
 }
@@ -49,7 +50,8 @@ async function getPostsById(id) {
       "posts.context",
       "posts.hashtags",
       "users.fake_id",
-      "users.profile_picture"
+      "users.profile_picture",
+      "users.is_admin"
     );
   post.votes = await getVotingCountsByPostId(post.id);
   return post;
@@ -91,7 +93,8 @@ function search(filter) {
       "posts.description",
       "posts.hashtags",
       "users.fake_id",
-      "users.profile_picture"
+      "users.profile_picture",
+      "users.is_admin"
     );
 }
 
@@ -154,7 +157,8 @@ async function getPostByIdSimple(id) {
       "posts.context",
       "posts.user_id",
       "users.fake_id",
-      "users.profile_picture"
+      "users.profile_picture",
+      "users.is_admin"
     );
 
   const list = await getBookmarksCounts(post.id);

@@ -6,7 +6,6 @@ router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const user = await Users.getUserById(id);
-    console.log("yes");
     user.posts = await Posts.getPostsByUserId(id);
     user.bookmarks = await Posts.getBookmarkedPostsByUserId(id);
     user.upVotes = await Posts.getUpVotedPostsByUserId(id);

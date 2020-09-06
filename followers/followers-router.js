@@ -16,7 +16,6 @@ router.post("/:id", (req, res) => {
       res.status(200).json({ followered });
     })
     .catch((err) => {
-      console.log("nope");
       res.status(500).json({ err });
     });
 });

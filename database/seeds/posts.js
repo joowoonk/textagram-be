@@ -30,6 +30,7 @@ exports.seed = function (knex) {
     {
       title: "One of best line I heard from Yoda!",
       context: `Do, or do not. There is no 'try' 
+      
       - Yoda`,
       user_id: 3,
       hashtags: ["#StarWars", "#MayTheForceBeWithYou", "#Yoda"],

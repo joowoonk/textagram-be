@@ -12,22 +12,18 @@ const restricted = require("../auth/restricted-middleware");
 router.get("/", async (req, res) => {
   try {
     const posts = await Posts.getAllPosts();
-    // console.log({ posts });
 
     Promise.all(
       posts.map(async (post) => {
         const votes = await Posts.getVotingCountsByPostId(post.id);
-        // console.log("posts votes: ", votes);
+
         const comments = await Comments.getCommentsByPostId(post.id);
-        // console.log({ comments });
         post.votes = votes.votes;
         post.comments = comments.length;
-        // console.log({ post });
         return post;
       })
     )
       .then((posts) => {
-        // console.log(posts);
         res.status(200).json({ posts });
       })
       .catch((err) => {
@@ -43,10 +39,6 @@ router.get("/:id", async (req, res) => {
     const id = req.params.id;
 
     const post = await Posts.getPostsById(id);
-
-    // const votes = await Posts.getVotingCountsByPostId(id);
-
-    // post.votes = votes.count;
     post.comments = await Comments.getCommentsByPostId(id);
 
     res.status(200).json({ post });

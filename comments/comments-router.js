@@ -29,14 +29,13 @@ router.post("/:id", (req, res) => {
   comment.post_id = id;
   comment.user_id = decode.subject;
 
+  comment.comment = comment.comment.split("\n");
   Comments.addComment(comment)
     .then((newComment) => {
-      const response = res.status(201).json({ newComment });
-      // console.log({ response });
+      res.status(201).json({ newComment });
     })
     .catch((err) => {
-      const error = res.status(500).json({ err });
-      // console.log({ error });
+      res.status(500).json({ err });
     });
 });
 

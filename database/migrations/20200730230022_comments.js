@@ -2,8 +2,7 @@ exports.up = function (knex) {
   return knex.schema.createTable("comments", (comments) => {
     comments.increments();
 
-    comments.string("text", 1000).notNullable();
-
+    comments.specificType("comment", "text ARRAY");
     comments.timestamp("created_at").defaultTo(knex.fn.now());
 
     comments

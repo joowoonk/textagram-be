@@ -20,7 +20,7 @@ function getCommentsByPostId(id) {
     .join("users", "comments.user_id", "users.id")
     .select(
       "comments.id",
-      "comments.text",
+      "comments.comment",
       "comments.created_at",
       "users.id as user_id",
       "users.fake_id",
