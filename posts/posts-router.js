@@ -3,7 +3,9 @@ const jwt_decode = require("jwt-decode");
 
 const Posts = require("./posts-model");
 const Comments = require("../comments/comments-model");
+const Users = require("../users/users-model");
 const restricted = require("../auth/restricted-middleware");
+const usersModel = require("../users/users-model");
 
 // --- api/posts
 
@@ -93,6 +95,18 @@ router.post("/", (req, res) => {
     // alert("your hashtags are too many!");
     res.status(402).json({ message: "your hashtags are too many!" });
   }
+});
+
+router.delete("/:id", restricted, verifyPostId, verifyUser, (req, res) => {
+  const id = req.params.id;
+
+  Posts.deletePost(id)
+    .then((del) => {
+      res.status(200).json({ message: "Your post is gone" });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
 //adding new bookmark to a post
@@ -237,5 +251,44 @@ router.delete("/:id/unbookmark", restricted, (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// Middleware goes here below
+
+function verifyPostId(req, res, next) {
+  const id = req.params.id;
+
+  Posts.findById(id)
+    .then((item) => {
+      if (item) {
+        req.item = item;
+        next();
+      } else {
+        res.status(404).json({ message: "Post Not Found" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ err });
+    });
+}
+
+async function verifyUser(req, res, next) {
+  const id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const post = await Posts.getPostsById(id);
+  const user = await Users.getUserById(decoded.subject);
+
+  if (user.is_admin) {
+    // checking if user logged in as an admin account
+    next();
+  } else if (+post.user_id === decoded.subject) {
+    //Otherwise check with general accounts
+    next();
+  } else {
+    res.status(401).json({
+      message: "Make sure to log in to right user!",
+    });
+  }
+}
 
 module.exports = router;

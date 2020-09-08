@@ -13,3 +13,20 @@ Now let's work on making the bookmark working. refer to frontend and backend of 
 
 
 liking buttons are working, singlepageview isn't working right now. fix it!
+
+Ink pades away after getting negative votes numbers
+
+09/07/20
+fixes the issue with url problem where people cannot start using on first page... maybe just have marketing page view shown as default.. idk. 
+
+delete post by only the texter and admin (for all posts)
+
+Top 5 of hashtags & posts https://stackoverflow.com/questions/39254218/js-get-top-5-max-elements-from-array on side
+
+figure out how to update/edit post, going back to like upload form with the existed context
+
+bookmarks sections need to implenemnt
+
+following sections need to implenemnt
+
+allow users to edit their profile. probably others should be need to see others profile also so they can follow. 

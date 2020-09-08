@@ -4,6 +4,7 @@ module.exports = {
   getAllPosts,
   getPostsById,
   findBy,
+  findById,
   getPostsByUserId,
   getVotingCountsByPostId,
   getBookmarkedPostsByUserId,
@@ -48,10 +49,12 @@ async function getPostsById(id) {
       "posts.id",
       "posts.title",
       "posts.context",
+      "posts.created_at",
       "posts.hashtags",
       "users.fake_id",
       "users.profile_picture",
-      "users.is_admin"
+      "users.is_admin",
+      "users.id as user_id"
     );
   post.votes = await getVotingCountsByPostId(post.id);
   return post;
@@ -65,6 +68,10 @@ async function getPostsByUserId(id) {
 
 function findBy(filter) {
   return db("posts").where(filter);
+}
+
+function findById(id) {
+  return db("posts").where({ id }).first();
 }
 
 async function addNewPost(post) {
