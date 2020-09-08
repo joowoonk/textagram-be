@@ -11,6 +11,7 @@ module.exports = {
   addNewPost,
   updatePost,
   deletePost,
+  searchByTitle,
   getBookmarksCounts,
   upVotingPost,
   removeUpVotingPost,
@@ -90,7 +91,7 @@ function deletePost(id) {
   return db("posts").where({ id }).del();
 }
 
-function search(filter) {
+function searchByTitle(filter) {
   return db("posts")
     .where(db.raw(`LOWER("title")`, "like", `${filter.toLowerCase()}%`))
     .join("users", "posts.user_id", "users.id")

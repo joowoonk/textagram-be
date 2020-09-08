@@ -52,7 +52,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/search/:title", (req, res) => {
   const title = req.params.title;
-  Posts.search(title)
+  Posts.searchByTitle(title)
     .then((searched) => {
       res.status(200).json(searched);
     })
@@ -108,6 +108,26 @@ router.delete("/:id", restricted, verifyPostId, verifyUser, (req, res) => {
       res.status(500).json(err);
     });
 });
+
+router.put(
+  "/:id",
+  restricted,
+  verifyPostId,
+  verifyUser,
+  verifyPostContent,
+  (req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+
+    Posts.updatePost(id, changes)
+      .then((updatePost) => {
+        res.status(201).json(updatePost);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  }
+);
 
 //adding new bookmark to a post
 router.post("/:id/bookmark", restricted, (req, res) => {
@@ -288,6 +308,19 @@ async function verifyUser(req, res, next) {
     res.status(401).json({
       message: "Make sure to log in to right user!",
     });
+  }
+}
+
+function verifyPostContent(req, res, next) {
+  if (
+    req.body.title === "" ||
+    req.body.title === null ||
+    req.body.context === "" ||
+    req.body.context === null
+  ) {
+    res.status(400).json({ message: "Title and context are required" });
+  } else {
+    next();
   }
 }
 
