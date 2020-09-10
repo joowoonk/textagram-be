@@ -22,7 +22,7 @@ function getCommentsByPostId(id) {
       "comments.id",
       "comments.comment",
       "comments.created_at",
-      "users.id as user_id",
+      "comments.user_id",
       "users.fake_id",
       "users.profile_picture"
     );

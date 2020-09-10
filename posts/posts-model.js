@@ -1,4 +1,5 @@
 const db = require("../database/db");
+const Comments = require("../comments/comments-model");
 
 module.exports = {
   getAllPosts,
@@ -32,7 +33,7 @@ function getAllPosts() {
       "posts.context",
       "posts.created_at",
       "posts.user_id",
-
+      "posts.feeling",
       "posts.hashtags",
       "users.fake_id",
       "users.profile_picture",
@@ -52,6 +53,7 @@ async function getPostsById(id) {
       "posts.context",
       "posts.created_at",
       "posts.hashtags",
+      "posts.feeling",
       "users.fake_id",
       "users.profile_picture",
       "users.is_admin",
@@ -91,14 +93,14 @@ function deletePost(id) {
   return db("posts").where({ id }).del();
 }
 
-function searchByTitle(filter) {
+function searchByTitle(value) {
   return db("posts")
-    .where(db.raw(`LOWER("title")`, "like", `${filter.toLowerCase()}%`))
+    .where(db.raw('LOWER("title")'), "like", `%${value.toLowerCase()}%`)
     .join("users", "posts.user_id", "users.id")
     .select(
       "posts.id",
       "posts.title",
-      "posts.description",
+      "posts.context",
       "posts.hashtags",
       "users.fake_id",
       "users.profile_picture",

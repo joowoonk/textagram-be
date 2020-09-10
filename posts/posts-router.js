@@ -5,7 +5,6 @@ const Posts = require("./posts-model");
 const Comments = require("../comments/comments-model");
 const Users = require("../users/users-model");
 const restricted = require("../auth/restricted-middleware");
-const usersModel = require("../users/users-model");
 
 // --- api/posts
 
@@ -20,6 +19,7 @@ router.get("/", async (req, res) => {
         const votes = await Posts.getVotingCountsByPostId(post.id);
 
         const comments = await Comments.getCommentsByPostId(post.id);
+
         post.votes = votes.votes;
         post.comments = comments.length;
         return post;
@@ -45,12 +45,11 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).json({ post });
   } catch (error) {
-    console.log("noooo");
     res.status(500).json(error);
   }
 });
 
-router.get("/search/:title", (req, res) => {
+router.get("/search/:title", async (req, res) => {
   const title = req.params.title;
   Posts.searchByTitle(title)
     .then((searched) => {
@@ -71,7 +70,7 @@ router.post("/", (req, res) => {
   post.hashtags = post.hashtags.replace("#", "");
   post.hashtags = post.hashtags.replace(
     /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.#@£\/]/g,
-    ""
+    " "
   );
   post.hashtags = post.hashtags
     .replace(/#/g, "")
@@ -116,8 +115,10 @@ router.put(
   verifyUser,
   verifyPostContent,
   (req, res) => {
+    console.log("yes?");
     const id = req.params.id;
     const changes = req.body;
+    console.log(id);
 
     Posts.updatePost(id, changes)
       .then((updatePost) => {
