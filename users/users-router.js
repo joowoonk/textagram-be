@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Users = require("./users-model");
 const Posts = require("../posts/posts-model");
-const Comments = require("../comments/comments-model");
 
 router.get("/:id", async (req, res) => {
   try {
@@ -15,14 +14,6 @@ router.get("/:id", async (req, res) => {
     user.follwers = await Users.getFollowersByUserId(id);
     delete user.password;
 
-    // user.bookmarks.forEach(async (post) => {
-    //   const comments = await Comments.getCommentsByPostId(post.id);
-    //   post.comments = comments.length;
-    //   console.log(post);
-    //   return post;
-    // });
-
-    // console.log(user.bookmarks);
     Promise.all(
       user.posts.map(async (post) => {
         const totalVotes = await Posts.getVotingCountsByPostId(post.id);
