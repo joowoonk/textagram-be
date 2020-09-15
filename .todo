@@ -22,13 +22,16 @@ fixes the issue with url problem where people cannot start using on first page..
 Top 5 of hashtags & posts https://stackoverflow.com/questions/39254218/js-get-top-5-max-elements-from-array on side
 
 figure out how to update/edit post, going back to like upload form with the existed context
-09/07/20
-
-
 
 bookmarks sections need to implenemnt
+Make sure to add comments sections.
+09/07/20
+
+allowing users and admin to change their comments
 
 profile will allow users to see what this user postsed. Make sure to use params so others users can see one's information as well. 
+
+make endpoint where admin can change text saying "This post was removed by admin because this post violated against the policy"
 
 following sections need to implenemnt
 

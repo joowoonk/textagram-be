@@ -5,7 +5,7 @@ module.exports = {
   getPostsByUserId,
   findBy,
   addNewUser,
-  updateUser,
+  editUser,
   deleteUser,
   getFollowedUsersByUserId,
   getFollowersByUserId,
@@ -29,7 +29,7 @@ async function addNewUser(user) {
   return getUserById(id);
 }
 
-async function updateUser(id, changes) {
+async function editUser(id, changes) {
   await db("users").where({ id }).update(changes);
 
   return getUserById(id);
