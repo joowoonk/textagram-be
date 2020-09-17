@@ -14,7 +14,7 @@ router.get("/:id", async (req, res) => {
     user.upVotes = await Posts.getUpVotedPostsByUserId(id);
     user.downVotes = await Posts.getDownVotedPostsByUserId(id);
     user.following = await Users.getFollowedUsersByUserId(id);
-    user.follwers = await Users.getFollowersByUserId(id);
+    user.followers = await Users.getFollowersByUserId(id);
     delete user.password;
 
     Promise.all(
@@ -38,7 +38,7 @@ router.put(
   restricted,
   verifyUserId,
   validateEditContent,
-  verifyUser,
+
   (req, res) => {
     const id = req.params.id;
     const edit = req.body;
@@ -85,26 +85,6 @@ function verifyUserId(req, res, next) {
     .catch((err) => {
       res.status(500).json(err);
     });
-}
-
-async function verifyUser(req, res, next) {
-  const id = req.params.id;
-  const token = req.headers.authorization;
-  const decoded = jwt_decode(token);
-  const post = await Posts.getPostsById(id);
-  const user = await Users.getUserById(decoded.subject);
-
-  if (user.is_admin) {
-    // checking if user logged in as an admin account
-    next();
-  } else if (+post.user_id === decoded.subject) {
-    //Otherwise check with general accounts
-    next();
-  } else {
-    res.status(401).json({
-      message: "Make sure to log in to right user!",
-    });
-  }
 }
 
 module.exports = router;
