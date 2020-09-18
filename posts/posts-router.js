@@ -53,7 +53,22 @@ router.get("/search/:title", async (req, res) => {
   const title = req.params.title;
   Posts.searchByTitle(title)
     .then((searched) => {
-      res.status(200).json(searched);
+      Promise.all(
+        searched.map(async (post) => {
+          const votes = await Posts.getVotingCountsByPostId(post.id);
+
+          const comments = await Comments.getCommentsByPostId(post.id);
+
+          post.votes = votes.votes;
+          post.comments = comments.length;
+
+          return post;
+        })
+      )
+        .then((posts) => res.status(200).json({ posts }))
+        .catch((err) => {
+          res.status(500).json({ err });
+        });
     })
     .catch((error) => {
       res.status(500).json({ error });

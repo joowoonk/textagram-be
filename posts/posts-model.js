@@ -102,6 +102,8 @@ function searchByTitle(value) {
       "posts.title",
       "posts.context",
       "posts.hashtags",
+      "posts.created_at",
+      "posts.feeling",
       "users.fake_id",
       "users.profile_picture",
       "users.is_admin"
