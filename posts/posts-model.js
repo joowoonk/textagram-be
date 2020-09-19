@@ -204,7 +204,7 @@ async function getVotingCountsByPostId(post_id) {
   return { votes, upVoted, downVoted };
 }
 
-async function getUpVotingByPostId(post_id) {
+function getUpVotingByPostId(post_id) {
   return db("up_voted_post")
     .where({ post_id })
     .join("users", "up_voted_post.user_id", "users.id")
@@ -215,8 +215,8 @@ async function getUpVotingByPostId(post_id) {
       "users.profile_picture"
     );
 }
-async function getDownVotingByPostId(post_id) {
-  return await db("down_voted_post")
+function getDownVotingByPostId(post_id) {
+  return db("down_voted_post")
     .where({ post_id })
     .join("users", "down_voted_post.user_id", "users.id")
     .select(
