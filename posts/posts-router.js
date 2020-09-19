@@ -14,9 +14,11 @@ router.get("/", async (req, res) => {
   const posts = await Posts.getAllPosts();
   Promise.all(
     posts.map(async (post) => {
-      // const votes = await Posts.getVotingCountsByPostId(post.id);
+      const upVotes = await Posts.getUpVotingByPostId(post.id);
+      const downVotes = await Posts.getDownVotingByPostId(post.id);
       const comments = await Comments.getCommentsByPostId(post.id);
-      // post.votes = votes.votes;
+      post.votes = upVotes.length - downVotes.length;
+
       post.comments = comments.length;
       return post;
     })
