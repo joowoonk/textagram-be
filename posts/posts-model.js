@@ -16,8 +16,6 @@ module.exports = {
   getBookmarksCounts,
   upVotingPost,
   removeUpVotingPost,
-  getDownVotingByPostId,
-  getUpVotingByPostId,
   downVotingPost,
   removeDownVotingPost,
   bookmarkingPost,
@@ -34,9 +32,9 @@ function getAllPosts() {
       "posts.title",
       "posts.context",
       "posts.created_at",
+      "posts.user_id",
       "posts.feeling",
       "posts.hashtags",
-      "users.id",
       "users.fake_id",
       "users.profile_picture",
       "users.is_admin"
@@ -202,29 +200,6 @@ async function getVotingCountsByPostId(post_id) {
 
   let votes = upVoted.length - downVoted.length;
   return { votes, upVoted, downVoted };
-}
-
-function getUpVotingByPostId(post_id) {
-  return db("up_voted_post")
-    .where({ post_id })
-    .join("users", "up_voted_post.user_id", "users.id")
-    .select(
-      "up_voted_post.user_id",
-      "up_voted_post.post_id",
-      "users.fake_id",
-      "users.profile_picture"
-    );
-}
-function getDownVotingByPostId(post_id) {
-  return db("down_voted_post")
-    .where({ post_id })
-    .join("users", "down_voted_post.user_id", "users.id")
-    .select(
-      "down_voted_post.user_id",
-      "down_voted_post.post_id",
-      "users.fake_id",
-      "users.profile_picture"
-    );
 }
 
 async function getBookmarksCounts(post_id) {
