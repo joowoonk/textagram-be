@@ -19,7 +19,6 @@ router.get("/", async (req, res) => {
         const downVotes = await Posts.getDownVotingByPostId(post.id);
         const comments = await Comments.getCommentsByPostId(post.id);
         post.votes = upVotes.length - downVotes.length;
-
         post.comments = comments.length;
         return post;
       })
