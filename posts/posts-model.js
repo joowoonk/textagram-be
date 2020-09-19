@@ -34,9 +34,9 @@ function getAllPosts() {
       "posts.title",
       "posts.context",
       "posts.created_at",
-      "posts.user_id",
       "posts.feeling",
       "posts.hashtags",
+      "users.id",
       "users.fake_id",
       "users.profile_picture",
       "users.is_admin"
