@@ -12,14 +12,11 @@ const restricted = require("../auth/restricted-middleware");
 
 router.get("/", async (req, res) => {
   const posts = await Posts.getAllPosts();
-
   Promise.all(
     posts.map(async (post) => {
-      const votes = await Posts.getVotingCountsByPostId(post.id);
-
+      // const votes = await Posts.getVotingCountsByPostId(post.id);
       const comments = await Comments.getCommentsByPostId(post.id);
-
-      post.votes = votes.votes;
+      // post.votes = votes.votes;
       post.comments = comments.length;
       return post;
     })
