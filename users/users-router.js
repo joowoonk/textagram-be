@@ -45,6 +45,7 @@ router.put(
 
     Users.editUser(id, edit)
       .then((editedProfile) => {
+        delete editedProfile.password;
         res.status(201).json({ editedProfile });
       })
       .catch((err) => {
