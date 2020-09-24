@@ -19,7 +19,7 @@ function getPostsByUserId(id) {
   return db("posts").where({ user_id: id });
 }
 function getAllUsers() {
-  return db("users");
+  return db("users").orderBy("users.id", "asc");
 }
 
 function findBy(filter) {
