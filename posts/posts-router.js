@@ -69,7 +69,7 @@ router.get("/search/:title", async (req, res) => {
     });
 });
 
-router.post("/", restricted, verifyUser, (req, res) => {
+router.post("/", restricted, (req, res) => {
   let post = req.body;
   const token = req.headers.authorization;
   const decoded = jwt_decode(token);
