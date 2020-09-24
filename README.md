@@ -1,6 +1,14 @@
-<h1>Endpoints</h1>
+# Textagram API Documentation
 
-<h2>Users</h2>
+BaseURL: https://textagram-be.herokuapp.com/
+
+A REST API using Node.js, Express, knex.js, and PostgresQL.
+</br>Authentication implemented using bcrypt and JSON web token.
+
+# Endpoints
+
+### Authentication
+
 <details>
 <summary><b>POST - Register a new user</b></summary>
 
@@ -105,6 +113,23 @@ When successful will return status code of 201 (CREATED), the new user object an
 ```
 
 </details>
+
+### Users
+
+<details>
+<summary><b>GET - Get all users</b></summary>
+
+<b>Endpoint:</b> `/users/`
+</br>
+No token or request body required.
+
+When successful will return status code of 200 (OK) and an array of users.
+
+```json
+
+
+```
+
 <details>
 <summary><b>PUT - Update an existent user</b></summary>
 
@@ -141,7 +166,7 @@ When successful will return status code of 201 (CREATED), the updated user objec
 
 </details>
 
-<h2>Posts</h2>
+### Posts
 
 <details>
 <summary><b>GET - Fetching all posts</b></summary>
@@ -372,3 +397,91 @@ Requires a request body with the updated changes. Please see Data model portion 
 ```
 
 </details>
+
+<details>
+<summary><b>GET - Search posts by titles</b></summary>
+<b>Endpoint:</b> `/posts/search/:title`
+
+Requires a request body using params that matches a key word to find posts by title. As an example, a user uses keyword on the place of title https://textagram-be.herokuapp.com/api/posts/search/'famous' famouse will triger search and look for posts that has title of that key words.
+
+```json
+{
+  "posts": [
+    {
+      "id": 33,
+      "title": "UPDATED:A Famous Quote from back to the future",
+      "context": [
+        "“Your future is whatever you make it, so make it a good one.” - Doc"
+      ],
+      "hashtags": ["#quote", "#movie"],
+      "created_at": "2020-09-20T22:18:57.457Z",
+      "feeling": "😇 inspired",
+      "fake_id": "acctfac9e",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600640375/textagram/im1p8id2qeu9afrfkkfv.jpg",
+      "is_admin": false,
+      "votes": 3,
+      "comments": 0
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>POST - Add a new post</b></summary>
+<b>Endpoint:</b> `/posts`
+
+Authorization token required in headers. This is how the user's id is assigned to their post.
+Requires a request body with the post info. Please see Data model portion of this documentation for required fields. Here is an example:
+
+```json
+{
+  "title": "Just because you are in a bad situation",
+  "hashtags": "",
+  "context": "Doesn't mean you will stuck in a bad place forever, I hope you find things what you can control. Doesn't matter if it's small but keep on working on small things. Once you know how to finish small thing well, bigger things will come to you when you are ready."
+}
+```
+
+When successful will return status code of 201 (CREATED), the new post object that are joint with other tables(example):
+
+```json
+{
+  "newPost": {
+    "id": 37,
+    "title": "Just because you are in a bad situation",
+    "context": [
+      "Doesn't mean you will stuck in a bad place forever, I hope you find things what you can control. Doesn't matter if it's small but keep on working on small things. Once you know how to finish small thing well, bigger things will come to you when you are ready."
+    ],
+    "created_at": "2020-09-24T05:40:20.453Z",
+    "hashtags": [],
+    "feeling": null,
+    "fake_id": "accta1e96",
+    "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600566435/textagram/oe7irlf84m4wbmaofboc.jpg",
+    "is_admin": false,
+    "user_id": 16,
+    "votes": {
+      "votes": 0,
+      "upVoted": [],
+      "downVoted": []
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>DELETE - Delete Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id`
+
+Authorization token required in headers. Only the user is authorized to delete their own posts.
+No request body required.
+
+When successful will return status code of 200 (OK) and a success message:
+
+```json
+{
+  "message": "Your post is gone."
+}
+```

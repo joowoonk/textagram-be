@@ -5,6 +5,16 @@ const jwt_decode = require("jwt-decode");
 const Comments = require("../comments/comments-model");
 const restricted = require("../auth/restricted-middleware");
 
+router.get("/", async (req, res) => {
+  Users.getAllUsers()
+    .then((users) => {
+      res.status(200).json(users);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;

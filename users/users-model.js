@@ -9,6 +9,7 @@ module.exports = {
   deleteUser,
   getFollowedUsersByUserId,
   getFollowersByUserId,
+  getAllUsers,
 };
 
 function getUserById(id) {
@@ -16,6 +17,9 @@ function getUserById(id) {
 }
 function getPostsByUserId(id) {
   return db("posts").where({ user_id: id });
+}
+function getAllUsers() {
+  return db("users");
 }
 
 function findBy(filter) {

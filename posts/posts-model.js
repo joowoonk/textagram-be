@@ -1,5 +1,6 @@
 const db = require("../database/db");
 const Comments = require("../comments/comments-model");
+const { getCommentsByPostId } = require("../comments/comments-model");
 
 module.exports = {
   getAllPosts,
