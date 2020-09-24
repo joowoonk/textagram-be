@@ -126,9 +126,183 @@ No token or request body required.
 When successful will return status code of 200 (OK) and an array of users.
 
 ```json
-
-
+[
+  {
+    "id": 1,
+    "username": "KANG",
+    "password": "$2a$10$XMCULNrp8qcFE4b5SmjxfOdOi4nJ9vaL94oTsEX9p1Qd8HmA.zdNa",
+    "email": "admin@textagram.com",
+    "created_at": "2020-09-19T20:51:24.150Z",
+    "fake_id": "ADMINKANG",
+    "location": "Los Angeles, CA",
+    "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+    "about": "Welcome to my website! If you run into any bugs or issues send me a message to get it fixed. I will handle all of the technical details and making sure you have a smooth experience.",
+    "is_admin": true
+  },
+  {
+    "id": 2,
+    "username": "John",
+    "password": "$2a$10$/kJRwItSVmcfQ0tDL1vIW.vIX5YOr9oQs/WB.auplvvLxF5B4SfkW",
+    "email": "john@mail.com",
+    "created_at": "2020-09-19T20:51:57.894Z",
+    "fake_id": "acct862b6",
+    "location": "New York, NY",
+    "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549341/textagram/f1xcdiwslh7hu50dipql.jpg",
+    "about": "Would you like to recommend me great movies?",
+    "is_admin": false
+  }
+]
 ```
+
+</details>
+
+<details>
+<summary><b>GET - Get a single user by ID</b></summary>
+
+<b>Endpoint:</b> `/users/:id`
+</br>
+No token or request body required.
+
+When successful will return status code of 200 (OK) and the user in an object. The user by id endpoint includes the user's bio info, as well as their array of posts, up votes, down votes, comments,favorites, and followers.
+
+```json
+{
+  "user": {
+    "id": 2,
+    "username": "John",
+    "email": "john@mail.com",
+    "created_at": "2020-09-19T20:51:57.894Z",
+    "fake_id": "acct862b6",
+    "location": "New York, NY",
+    "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549341/textagram/f1xcdiwslh7hu50dipql.jpg",
+    "about": "Would you like to recommend me great movies?",
+    "is_admin": false,
+    "posts": [
+      {
+        "id": 3,
+        "title": "One of best quote from Rush",
+        "context": [
+          "A wise man can learn more from his enemies than a fool from his friends.",
+          "      –Niki Lauda"
+        ],
+        "created_at": "2020-09-19T20:52:16.194Z",
+        "hashtags": ["#movie", "#Rush", "#inspirational"],
+        "user_id": 2,
+        "feeling": "😃 awesome",
+        "votes": 0,
+        "comments": []
+      },
+      {
+        "id": 2,
+        "title": "One of best quote from Forrest Gump",
+        "context": [
+          "My mama always said, ‘Life was like a box of chocolates. You never know what you’re gonna get.'",
+          "         -Forrest Gump"
+        ],
+        "created_at": "2020-09-19T20:52:16.194Z",
+        "hashtags": ["#bestMovie", "#forrest", "#gump", "#life"],
+        "user_id": 2,
+        "feeling": "😇 optimistic",
+        "votes": 0,
+        "comments": [
+          {
+            "id": 8,
+            "comment": ["Forest Gump is such a best movie in our life time"],
+            "created_at": "2020-09-19T20:52:52.928Z",
+            "user_id": 3,
+            "fake_id": "acctdd1d3",
+            "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549277/textagram/b2plpajntmyovuknnkcp.jpg"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Gratitude (an excerpt from my writing)",
+        "context": [
+          "Gratitude",
+          "",
+          "      Fight is what gets you up each morning. It is what pushes you and keeps you grounded when you take your next step. The pain and struggle that you endure on a daily basis makes you appreciate the good moments of life. I’ve learned that the reward you receive is when you start reaching that never-ending goal of greatness. Being grateful for these moments can propel you to that next step. I understand that the road is not always easy but once you come to that realization that you can take those next steps, then anything is possible. Keep faith and expect the best.",
+          "      ",
+          "      \"As we express our gratitude, we must never forget that the highest appreciation is not to utter words but to live by them.\" John F. Kennedy. Embrace this. There are too many people in this world who take things for granted, including themselves. In the bigger picture, you will never get satisfaction from those great moments if you don’t appreciate even the smallest moments in your life. If you receive a compliment, embrace those words like John F Kennedy stated. Why would someone give you a compliment that they thought out, and not wanted you to feel good about it? They mean it and want you to receive their reward.",
+          "      This Post was from r/inspiration",
+          "      [https://www.reddit.com/r/inspiration/comments/inbv68/gratitude_an_excerpt_from_my_writing/]"
+        ],
+        "created_at": "2020-09-19T20:52:35.170Z",
+        "hashtags": ["#reddit", "#inspiration"],
+        "user_id": 2,
+        "feeling": "😊 thankful",
+        "votes": 2,
+        "comments": []
+      }
+    ],
+    "bookmarks": [],
+    "upVotes": [],
+    "downVotes": [],
+    "following": [],
+    "followers": []
+  },
+  "post": [
+    {
+      "id": 3,
+      "title": "One of best quote from Rush",
+      "context": [
+        "A wise man can learn more from his enemies than a fool from his friends.",
+        "      –Niki Lauda"
+      ],
+      "created_at": "2020-09-19T20:52:16.194Z",
+      "hashtags": ["#movie", "#Rush", "#inspirational"],
+      "user_id": 2,
+      "feeling": "😃 awesome",
+      "votes": 0,
+      "comments": []
+    },
+    {
+      "id": 2,
+      "title": "One of best quote from Forrest Gump",
+      "context": [
+        "My mama always said, ‘Life was like a box of chocolates. You never know what you’re gonna get.'",
+        "         -Forrest Gump"
+      ],
+      "created_at": "2020-09-19T20:52:16.194Z",
+      "hashtags": ["#bestMovie", "#forrest", "#gump", "#life"],
+      "user_id": 2,
+      "feeling": "😇 optimistic",
+      "votes": 0,
+      "comments": [
+        {
+          "id": 8,
+          "comment": ["Forest Gump is such a best movie in our life time"],
+          "created_at": "2020-09-19T20:52:52.928Z",
+          "user_id": 3,
+          "fake_id": "acctdd1d3",
+          "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549277/textagram/b2plpajntmyovuknnkcp.jpg"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Gratitude (an excerpt from my writing)",
+      "context": [
+        "Gratitude",
+        "",
+        "      Fight is what gets you up each morning. It is what pushes you and keeps you grounded when you take your next step. The pain and struggle that you endure on a daily basis makes you appreciate the good moments of life. I’ve learned that the reward you receive is when you start reaching that never-ending goal of greatness. Being grateful for these moments can propel you to that next step. I understand that the road is not always easy but once you come to that realization that you can take those next steps, then anything is possible. Keep faith and expect the best.",
+        "      ",
+        "      \"As we express our gratitude, we must never forget that the highest appreciation is not to utter words but to live by them.\" John F. Kennedy. Embrace this. There are too many people in this world who take things for granted, including themselves. In the bigger picture, you will never get satisfaction from those great moments if you don’t appreciate even the smallest moments in your life. If you receive a compliment, embrace those words like John F Kennedy stated. Why would someone give you a compliment that they thought out, and not wanted you to feel good about it? They mean it and want you to receive their reward.",
+        "      This Post was from r/inspiration",
+        "      [https://www.reddit.com/r/inspiration/comments/inbv68/gratitude_an_excerpt_from_my_writing/]"
+      ],
+      "created_at": "2020-09-19T20:52:35.170Z",
+      "hashtags": ["#reddit", "#inspiration"],
+      "user_id": 2,
+      "feeling": "😊 thankful",
+      "votes": 2,
+      "comments": []
+    }
+  ]
+}
+```
+
+</details>
 
 <details>
 <summary><b>PUT - Update an existent user</b></summary>
@@ -485,3 +659,5 @@ When successful will return status code of 200 (OK) and a success message:
   "message": "Your post is gone."
 }
 ```
+
+</details>
