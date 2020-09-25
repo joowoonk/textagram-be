@@ -75,7 +75,7 @@ router.put("/:id", (req, res) => {
 
   Comments.updateCommentById(id, changes)
     .then((updatedComment) => {
-      res.status(201).json({ updatedComment });
+      res.status(201).json({ message: "comment now updated" });
     })
     .catch((err) => {
       res.status(500).json(err);

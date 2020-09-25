@@ -450,7 +450,7 @@ When successful will return status code of 200 (READ), the all posts (example):
 </br>
 No token or request body required.
 
-When successful will return status code of 200 (OK) and the photo object. The photo by id endpoint includes the post details as well as the total of votes (up votes - down votes), and array of comments.
+When successful will return status code of 200 (OK) and the posts object. The posts by id endpoint includes the post details as well as the total of votes (up votes - down votes), and array of comments.
 
 ```json
 {
@@ -728,6 +728,7 @@ When successful will return status code of 201 (CREATED) and with the post that'
 <details>
 <summary><b>POST - Bookmark Post by ID</b></summary>
 <b>Endpoint:</b> `/posts/:id/bookmark`
+
 Authorization token required in headers. Only the user is authorized to bookmark others' posts.
 No request body required.
 
@@ -870,6 +871,7 @@ When successful will return status code of 201 (CREATE) and of every post that t
 <details>
 <summary><b>DELETE - Canceling Down Vote Post by ID</b></summary>
 <b>Endpoint:</b> `/posts/:id/removedownvote`
+
 Authorization token required in headers. Only the user is authorized to cancel up vote others' posts.
 No request body required.
 
@@ -880,3 +882,153 @@ When successful will return status code of 200 (OK) and a success message:
   "message": "The down vote got canceled"
 }
 ```
+
+</details>
+
+### Comments
+
+<details>
+<summary><b>GET - Get Comment by ID</b></summary>
+<b>Endpoint:</b> `/comments/:id`
+
+No token or request body required.
+
+When successful will return status code of 200 (OK) and the comment objectt. The comment by id endpoint includes the comment details
+
+```json
+{
+  "comment": {
+    "id": 6,
+    "comment": ["first comments! Ooh hoo!"],
+    "created_at": "2020-09-19T20:52:52.928Z",
+    "post_id": 1,
+    "user_id": 2
+  }
+}
+```
+
+</details>
+<details>
+<summary><b>POST - Add Comment by Post ID</b></summary>
+<b>Endpoint:</b> `/comments/:id`
+
+Authorization token required in headers. Only the user is authorized to add a comment to a post by its post id.
+
+When successful will return status code of 201 (CREATE) and comment object:
+
+```json
+{
+  "newComment": {
+    "id": 24,
+    "comment": ["Thank you for the post!"],
+    "created_at": "2020-09-25T22:54:04.403Z",
+    "post_id": 2,
+    "user_id": 1
+  }
+}
+```
+
+</details>
+<details>
+<summary><b>GET - Get Comments by Post ID</b></summary>
+<b>Endpoint:</b> `/comments/post/:id`
+
+No token or request body required.
+
+When successful will return status code of 200 (OK) and the comment objects. The comment by post id endpoint including the comments' details
+
+```json
+{
+  "comments": [
+    {
+      "id": 6,
+      "comment": ["first comments! Ooh hoo!"],
+      "created_at": "2020-09-19T20:52:52.928Z",
+      "user_id": 2,
+      "fake_id": "acct862b6",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549341/textagram/f1xcdiwslh7hu50dipql.jpg"
+    },
+    {
+      "id": 7,
+      "comment": [
+        "Having three real friends in life is equivalent to having a successful life"
+      ],
+      "created_at": "2020-09-19T20:52:52.928Z",
+      "user_id": 3,
+      "fake_id": "acctdd1d3",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549277/textagram/b2plpajntmyovuknnkcp.jpg"
+    }
+  ]
+}
+```
+
+</details>
+<details>
+<summary><b>GET - Get Comments by User ID</b></summary>
+<b>Endpoint:</b> `/comments/user/:id`
+
+No token or request body required.
+
+When successful will return status code of 200 (OK) and the comment objects. The comments by user id endpoint including the comments' details
+
+```json
+{
+  "comments": [
+    {
+      "id": 6,
+      "comment": ["first comments! Ooh hoo!"],
+      "created_at": "2020-09-19T20:52:52.928Z",
+      "post_id": 1,
+      "user_id": 2
+    },
+    {
+      "id": 9,
+      "comment": ["May the force be with you!"],
+      "created_at": "2020-09-19T20:52:52.928Z",
+      "post_id": 4,
+      "user_id": 2
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>PUT - Edit comment by ID</b></summary>
+<b>Endpoint:</b> `/comments/:id`
+</br>
+Authorization token required in headers. The user is authorized to update their own post. Admin has accessibility to update other accounts' posts as well.
+
+Requires a request body with the updated changes. Please see Data model portion of this documentation for required fields. Here is an example:
+
+```json
+{
+  "comment": ["Thank you for the post!"]
+}
+```
+
+When successful will return status code of 201 (CREATED), the updated comment object (example):
+
+```json
+{ "message": "comment now updated" }
+```
+
+</details>
+<details>
+<summary><b>DELETE - Delete Post by ID</b></summary>
+<b>Endpoint:</b> `/comments/:id`
+
+Authorization token required in headers. Only the user is authorized to delete their own comments.
+No request body required.
+Admin has accessibility to delete other accounts' comments as well.
+
+When successful will return status code of 200 (OK) and a success message:
+
+```json
+{
+  "message": "Your comment's successfully deleted."
+}
+```
+
+</details>
