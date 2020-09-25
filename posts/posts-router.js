@@ -124,7 +124,6 @@ router.put(
   verifyUser,
   verifyPostContent,
   (req, res) => {
-    console.log("yes?");
     const id = req.params.id;
     const changes = req.body;
     console.log(id);
@@ -165,9 +164,25 @@ router.post("/:id/bookmark", restricted, (req, res) => {
     });
 });
 
+router.delete("/:id/unbookmark", restricted, (req, res) => {
+  const post_id = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+  const user_id = decoded.subject;
+
+  Posts.removeBookmarkingPost(user_id, post_id)
+    .then((results) => {
+      res.status(200).json({ message: "The bookmark got canceled" });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 router.post("/:id/upvote", restricted, (req, res) => {
   const post_id = req.params.id;
   const token = req.headers.authorization;
+
   const decoded = jwt_decode(token);
   const user_id = decoded.subject;
 
@@ -196,21 +211,12 @@ router.delete("/:id/removeupvote", restricted, (req, res) => {
 
   Posts.removeUpVotingPost(user_id, post_id)
     .then((results) => {
-      Promise.all(
-        results.map(async (post) => {
-          const votes = await Posts.getVotingCountsByPostId(post.id);
-          post.votes = votes.votes;
-          return post;
-        })
-      ).then((posts) => {
-        res.status(200).json({ posts });
-      });
+      res.status(200).json({ message: "The up vote got canceled" });
     })
     .catch((err) => {
       res.status(500).json(err);
     });
 });
-
 router.post("/:id/downvote", restricted, (req, res) => {
   const post_id = req.params.id;
   const token = req.headers.authorization;
@@ -242,40 +248,7 @@ router.delete("/:id/removedownvote", restricted, (req, res) => {
 
   Posts.removeDownVotingPost(user_id, post_id)
     .then((results) => {
-      Promise.all(
-        results.map(async (post) => {
-          const votes = await Posts.getVotingCountsByPostId(post.id);
-          post.votes = votes.votes;
-          return post;
-        })
-      ).then((posts) => {
-        res.status(200).json({ posts });
-      });
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
-
-router.delete("/:id/unbookmark", restricted, (req, res) => {
-  const post_id = req.params.id;
-  const token = req.headers.authorization;
-  const decoded = jwt_decode(token);
-  const user_id = decoded.subject;
-
-  Posts.removeBookmarkingPost(user_id, post_id)
-    .then((results) => {
-      Promise.all(
-        results.map(async (post) => {
-          const bookmarks = await Posts.getBookmarksCounts(post.id);
-          const comments = await Comments.getCommentsByPostId(post.id);
-          post.bookmarks = bookmarks.count;
-          post.comments = comments.length;
-          return post;
-        })
-      ).then((posts) => {
-        res.status(200).json({ posts });
-      });
+      res.status(200).json({ message: "The down vote got canceled" });
     })
     .catch((err) => {
       res.status(500).json(err);

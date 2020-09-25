@@ -617,7 +617,7 @@ Requires a request body with the post info. Please see Data model portion of thi
 }
 ```
 
-When successful will return status code of 201 (CREATED), the new post object that are joint with other tables(example):
+When successful will return status code of 201 (CREATED), the new post object that are joint with other tables:
 
 ```json
 {
@@ -651,6 +651,7 @@ When successful will return status code of 201 (CREATED), the new post object th
 
 Authorization token required in headers. Only the user is authorized to delete their own posts.
 No request body required.
+Admin has accessibility to delete other accounts' posts as well.
 
 When successful will return status code of 200 (OK) and a success message:
 
@@ -661,3 +662,149 @@ When successful will return status code of 200 (OK) and a success message:
 ```
 
 </details>
+
+<details>
+<summary><b>PUT - Update Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id`
+
+Authorization token required in headers. Only the user is authorized to delete their own posts.
+No request body required.
+Admin has accessibility to update other accounts' posts as well.
+
+Please see Data model portion of this documentation for required fields. Here is an example:
+
+```json
+{
+  "title": "UPDATED:A Famous Quote from back to the future",
+  "hashtags": ["#quote", "#movie"]
+}
+```
+
+When successful will return status code of 201 (CREATED) and with the post that's been updated:
+
+```json
+{
+  "id": 33,
+  "title": "UPDATED:A Famous Quote from back to the future",
+  "context": [
+    "“Your future is whatever you make it, so make it a good one.” - Doc"
+  ],
+  "created_at": "2020-09-20T22:18:57.457Z",
+  "hashtags": ["#quote", "#movie"],
+  "feeling": "😇 inspired",
+  "fake_id": "acctfac9e",
+  "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600640375/textagram/im1p8id2qeu9afrfkkfv.jpg",
+  "is_admin": false,
+  "user_id": 17,
+  "votes": {
+    "votes": 3,
+    "upVoted": [
+      {
+        "user_id": 17,
+        "post_id": 33,
+        "fake_id": "acctfac9e",
+        "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600640375/textagram/im1p8id2qeu9afrfkkfv.jpg"
+      },
+      {
+        "user_id": 18,
+        "post_id": 33,
+        "fake_id": "acctbd60a",
+        "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600664556/textagram/g246nirqugqljx9sx4no.jpg"
+      },
+      {
+        "user_id": 1,
+        "post_id": 33,
+        "fake_id": "ADMINKANG",
+        "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png"
+      }
+    ],
+    "downVoted": []
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>POST - Bookmark Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/bookmark`
+Authorization token required in headers. Only the user is authorized to bookmark others' posts.
+No request body required.
+
+As for example, inserted id 21 on :id area.
+
+When successful will return status code of 200 (OK) and of every post that the user bookmarked so far including post's id by 21:
+
+```json
+{
+  "post": [
+    ...post,
+    {
+      "id": 21,
+      "title": "Hello From The Admin!",
+      "context": [
+        "Welcome to my website! Start coding since Feb. 2020! If you run into any bugs or issues send me a message to get it fixed. I will handle all the technical details and making sure you have a smooth experience. - 9/19/2020"
+      ],
+      "user_id": 1,
+      "fake_id": "ADMINKANG",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+      "bookmarks": "6",
+      "comments": 0
+    },
+    {
+      "id": 1,
+      "title": "One best quote regarding a honest friendship",
+      "context": [
+        "Bestfriend is not just a word. A best friend is someone who is there for you, no matter what. Thick or thin. I can label anyone as a friend. But a bestfriend..? That is something that needs to be earned. A bestfriend knows me sometimes more than I know myself. Bestfriends share tears and laughs. You can trust them with anything and everything. I have a bunch of friends, but only a few that I can count on completely"
+      ],
+      "user_id": 1,
+      "fake_id": "ADMINKANG",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+      "bookmarks": "1",
+      "comments": 2
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>DELETE - Unbookmark Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/unbookmark`
+
+Authorization token required in headers. Only the user is authorized to delete their own posts.
+No request body required.
+
+When successful will return status code of 200 (OK) and of every post that the user bookmarked so far, while excluding the post (id: 21):
+
+```json
+{
+  "post": [
+    ...post,
+    {
+      "id": 1,
+      "title": "One best quote regarding a honest friendship",
+      "context": [
+        "Bestfriend is not just a word. A best friend is someone who is there for you, no matter what. Thick or thin. I can label anyone as a friend. But a bestfriend..? That is something that needs to be earned. A bestfriend knows me sometimes more than I know myself. Bestfriends share tears and laughs. You can trust them with anything and everything. I have a bunch of friends, but only a few that I can count on completely"
+      ],
+      "user_id": 1,
+      "fake_id": "ADMINKANG",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+      "bookmarks": "1",
+      "comments": 2
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>POST - Up Vote Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/upvote`
+
+Authorization token required in headers. Only the user is authorized to up vote others' posts.
+No request body required.
+
+As for example, inserted id 21 on :id area.
