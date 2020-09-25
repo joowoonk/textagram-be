@@ -776,25 +776,11 @@ When successful will return status code of 200 (OK) and of every post that the u
 Authorization token required in headers. Only the user is authorized to delete their own posts.
 No request body required.
 
-When successful will return status code of 200 (OK) and of every post that the user bookmarked so far, while excluding the post (id: 21):
+When successful will return status code of 200 (OK) and a success message:
 
 ```json
 {
-  "post": [
-    ...post,
-    {
-      "id": 1,
-      "title": "One best quote regarding a honest friendship",
-      "context": [
-        "Bestfriend is not just a word. A best friend is someone who is there for you, no matter what. Thick or thin. I can label anyone as a friend. But a bestfriend..? That is something that needs to be earned. A bestfriend knows me sometimes more than I know myself. Bestfriends share tears and laughs. You can trust them with anything and everything. I have a bunch of friends, but only a few that I can count on completely"
-      ],
-      "user_id": 1,
-      "fake_id": "ADMINKANG",
-      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
-      "bookmarks": "1",
-      "comments": 2
-    }
-  ]
+  "message": "The bookmark got canceled"
 }
 ```
 
@@ -808,3 +794,89 @@ Authorization token required in headers. Only the user is authorized to up vote 
 No request body required.
 
 As for example, inserted id 21 on :id area.
+
+When successful will return status code of 201 (CREATE) and of every post that the user up votes on other posts including post's id by 21:
+
+```json
+{
+  "post": [
+    ...posts,
+    {
+      "id": 21,
+      "title": "Hello From The Admin!",
+      "context": [
+        "Welcome to my website! Start coding since Feb. 2020! If you run into any bugs or issues send me a message to get it fixed. I will handle all the technical details and making sure you have a smooth experience. - 9/19/2020"
+      ],
+      "user_id": 1,
+      "fake_id": "ADMINKANG",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+      "votes": 4
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>DELETE - Canceling Up Vote Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/removeupvote`
+
+Authorization token required in headers. Only the user is authorized to cancel up vote others' posts.
+No request body required.
+
+When successful will return status code of 200 (OK) and a success message:
+
+```json
+{
+  "message": "The up vote got canceled"
+}
+```
+
+</details>
+
+<details>
+<summary><b>POST - Down Vote Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/upvote`
+
+Authorization token required in headers. Only the user is authorized to up vote others' posts.
+No request body required.
+
+As for example, inserted id 21 on :id area.
+
+When successful will return status code of 201 (CREATE) and of every post that the user down votes on other posts including post's id by 21:
+
+```json
+{
+  "post": [
+    ...posts,
+    {
+      "id": 21,
+      "title": "Hello From The Admin!",
+      "context": [
+        "Welcome to my website! Start coding since Feb. 2020! If you run into any bugs or issues send me a message to get it fixed. I will handle all the technical details and making sure you have a smooth experience. - 9/19/2020"
+      ],
+      "user_id": 1,
+      "fake_id": "ADMINKANG",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549136/textagram/jjlsiypxt95wsjpb7cxu.png",
+      "votes": 3
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>DELETE - Canceling Down Vote Post by ID</b></summary>
+<b>Endpoint:</b> `/posts/:id/removedownvote`
+Authorization token required in headers. Only the user is authorized to cancel up vote others' posts.
+No request body required.
+
+When successful will return status code of 200 (OK) and a success message:
+
+```json
+{
+  "message": "The down vote got canceled"
+}
+```
