@@ -30,7 +30,7 @@ router.delete("/:id", (req, res) => {
 
   Followers.unfollowerUser(texter_id, follower_id)
     .then((followers) => {
-      res.status(200).json({ followers });
+      res.status(200).json({ message: "you've unfollowed this user" });
     })
     .catch((err) => {
       res.status(500).json({ err });

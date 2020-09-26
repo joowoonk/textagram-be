@@ -1016,7 +1016,7 @@ When successful will return status code of 201 (CREATED), the updated comment ob
 
 </details>
 <details>
-<summary><b>DELETE - Delete Post by ID</b></summary>
+<summary><b>DELETE - Delete Comment by ID</b></summary>
 <b>Endpoint:</b> `/comments/:id`
 
 Authorization token required in headers. Only the user is authorized to delete their own comments.
@@ -1029,6 +1029,81 @@ When successful will return status code of 200 (OK) and a success message:
 {
   "message": "Your comment's successfully deleted."
 }
+```
+
+</details>
+
+### Follow
+
+<details>
+<summary><b>POST - Follow by USER ID</b></summary>
+<b>Endpoint:</b> `/followers/:id`
+Authorization token required in headers. Only the user is authorized to follow other users.
+
+No token or request body required.
+
+When successful will return status code of 201 (CREATE) and the user's followings in objects:
+
+```json
+{
+  "followered": [
+    {
+      "created_at": "2020-09-19T21:02:05.266Z",
+      "id": 3,
+      "fake_id": "acctdd1d3",
+      "email": "david@mail.com",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549277/textagram/b2plpajntmyovuknnkcp.jpg",
+      "location": "Cedar Rapids, Iowa"
+    },
+    {
+      "created_at": "2020-09-24T23:34:56.861Z",
+      "id": 16,
+      "fake_id": "accta1e96",
+      "email": "test9@mail.com",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600566435/textagram/oe7irlf84m4wbmaofboc.jpg",
+      "location": "Los Angeles, CA"
+    },
+    {
+      "created_at": "2020-09-19T21:04:44.135Z",
+      "id": 4,
+      "fake_id": "acct82883",
+      "email": "jwkk@mail.com",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600549257/textagram/ndai4ovdwtcqbau20i2o.png",
+      "location": "San Jose, CA"
+    },
+    {
+      "created_at": "2020-09-26T00:39:19.696Z",
+      "id": 5,
+      "fake_id": "acct1a7ee",
+      "email": "test1@mail.com",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600559571/textagram/jiabvdecyta6ie6h6fd5.png",
+      "location": "Los Angeles, CA"
+    },
+    {
+      "created_at": "2020-09-24T23:34:42.491Z",
+      "id": 17,
+      "fake_id": "acctfac9e",
+      "email": "test10@mail.com",
+      "profile_picture": "https://res.cloudinary.com/dujr5xene/image/upload/v1600640375/textagram/im1p8id2qeu9afrfkkfv.jpg",
+      "location": "Hill Valley, CA"
+    }
+  ]
+}
+```
+
+</details>
+
+<details>
+<summary><b>DELETE - Unfollow a user by other User ID</b></summary>
+<b>Endpoint:</b> `/followers/:id/`
+
+Authorization token required in headers. Only the user is authorized to unfollow others.
+No request body required.
+
+When successful will return status code of 200 (OK) and a success message:
+
+```json
+message: "you've unfollowed this user"
 ```
 
 </details>
