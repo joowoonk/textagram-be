@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const Users = require("./users-model");
 const Posts = require("../posts/posts-model");
-const jwt_decode = require("jwt-decode");
 const Comments = require("../comments/comments-model");
 const restricted = require("../auth/restricted-middleware");
 
-router.get("/", async (req, res) => {
+router.get("/", restricted, async (req, res) => {
   Users.getAllUsers()
     .then((users) => {
       res.status(200).json(users);
