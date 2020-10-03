@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/joowoonk/textgram-be#readme",
   "dependencies": {
+    "axios": "^0.20.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",

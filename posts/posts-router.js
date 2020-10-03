@@ -1,14 +1,63 @@
 const router = require("express").Router();
+const db = require("../database/db");
 const jwt_decode = require("jwt-decode");
 
 const Posts = require("./posts-model");
 const Comments = require("../comments/comments-model");
 const Users = require("../users/users-model");
 const restricted = require("../auth/restricted-middleware");
+const axios = require("axios");
 
 // --- api/posts
 
 // GET all the posts
+
+router.post("/generate", restricted, (req, res) => {
+  let quote = req.body;
+  const token = req.headers.authorization;
+  const decoded = jwt_decode(token);
+
+  quote.user_id = decoded.subject;
+  axios({
+    url: "https://shakespeare-quotes-app.herokuapp.com/api/v1/quotes/single",
+    method: "get",
+  })
+    .then((post) => {
+      let play = post.data.quote;
+      quote.title = play.play;
+      quote.hashtags = play.theme;
+      quote.context = play.quote;
+      quote.hashtags = quote.hashtags.replace(",", "");
+      quote.hashtags = quote.hashtags.replace("#", "");
+      quote.hashtags = quote.hashtags.replace(
+        /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.#@£\/]/g,
+        " "
+      );
+      quote.hashtags = quote.hashtags
+        .replace(/#/g, "")
+        .replace(/([^" "]+)/g, "#" + "$1");
+      quote.hashtags = quote.hashtags.split(" ");
+      quote.hashtags = quote.hashtags.filter((hash) => {
+        return hash != "";
+      });
+
+      quote.context = quote.context.split("\n");
+      // delete quote.email;
+      // delete quote.password;
+      console.log(quote.title.length);
+      console.log(quote);
+      Posts.addNewPost(quote)
+        .then((newPost) => {
+          res.status(201).json({ newPost });
+        })
+        .catch((err) => {
+          res.status(500).json(err);
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
 router.get("/", async (req, res) => {
   const posts = await Posts.getAllPosts();
@@ -45,6 +94,14 @@ router.get("/:id", async (req, res) => {
 
 router.get("/search/:title", async (req, res) => {
   const title = req.params.title;
+
+  console.log(
+    db("posts")
+      .select("*")
+      .then((res) => {
+        console.log(res);
+      })
+  );
   Posts.searchByTitle(title)
     .then((searched) => {
       Promise.all(

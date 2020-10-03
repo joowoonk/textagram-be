@@ -94,6 +94,8 @@ function deletePost(id) {
   return db("posts").where({ id }).del();
 }
 
+function binarySearch(target, lst) {}
+
 function searchByTitle(value) {
   return db("posts")
     .where(db.raw('LOWER("title")'), "like", `%${value.toLowerCase()}%`)
