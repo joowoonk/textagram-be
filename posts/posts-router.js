@@ -274,6 +274,7 @@ router.delete("/:id/removeupvote", restricted, (req, res) => {
       res.status(500).json(err);
     });
 });
+
 router.post("/:id/downvote", restricted, (req, res) => {
   const post_id = req.params.id;
   const token = req.headers.authorization;
